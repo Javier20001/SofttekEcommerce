@@ -1,7 +1,9 @@
 package com.example.ecommers.service;
 
 import com.example.ecommers.model.ProductoEntity;
-import com.example.ecommers.repository.ProductoRepository;
+import com.example.ecommers.repository.I_ProductoRepository;
+import com.example.ecommers.serviceInterface.ProductoInterface;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,14 +11,14 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ProductoService {
-
-    private final ProductoRepository productoRepository;
+public class ProductoService implements ProductoInterface {
 
     @Autowired
-    public ProductoService(ProductoRepository productoRepository) {
-        this.productoRepository = productoRepository;
-    }
+    private I_ProductoRepository productoRepository;
+
+    // public ProductoService(I_ProductoRepository productoRepository) {
+    // this.productoRepository = productoRepository;
+    // }
 
     public List<ProductoEntity> getAllProductos() {
         return productoRepository.findAll();
@@ -44,6 +46,10 @@ public class ProductoService {
     }
 
     public void deleteProducto(Long id) {
-        productoRepository.deleteById(id);
+        productoRepository.findById(id).map(existingProducto -> {
+            existingProducto.setEstado(false);
+            return productoRepository.save(existingProducto);
+        })
+                .orElseThrow(() -> new RuntimeException("El producto con ID " + id + " no se encontró"));
     }
 }
