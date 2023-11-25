@@ -1,9 +1,7 @@
 package com.example.ecommers.model;
 
-
 import jakarta.persistence.*;
 import lombok.*;
-
 
 @Entity
 @Data
@@ -14,8 +12,7 @@ public class ProductoEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idProducto;
 
-    
-    //nombre del producto
+    // nombre del producto
     @Column(length = 100, nullable = false)
     private String productoNombre;
 
@@ -31,11 +28,12 @@ public class ProductoEntity {
     @Column(nullable = false)
     private double productoPrecio;
 
+    @Column(columnDefinition = "boolean default true")
+    private boolean estado;
+
     // Categoría del producto (relación Many-to-One con CategoryEntity)
     @ManyToOne
     @JoinColumn(name = "categoria_id", nullable = false)
     private CategoryEntity tipoCategoria;
-    
-}
 
-    
+}
