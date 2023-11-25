@@ -31,69 +31,6 @@ public class ProductoEntity {
     @ManyToOne
     @JoinColumn(name = "categoria_id", nullable = false)
     private CategoryEntity tipoCategoria;
-
-    // Constructores, getters y setters
-
-    public Producto() {
-    }
-
-    public Producto(Long idProducto, String productoNombre, int productoCantidad, String productoImagen, double productoPrecio, CategoryEntity tipoCategoria) {
-        this.idProducto = idProducto;
-        this.productoNombre = productoNombre;
-        this.productoCantidad = productoCantidad;
-        this.productoImagen = productoImagen;
-        this.productoPrecio = productoPrecio;
-        this.tipoCategoria = tipoCategoria;
-    }
-
-    public Long getIdProducto() {
-        return idProducto;
-    }
-
-    public void setIdProducto(Long idProducto) {
-        this.idProducto = idProducto;
-    }
-
-    public String getProductoNombre() {
-        return productoNombre;
-    }
-
-    public void setProductoNombre(String productoNombre) {
-        this.productoNombre = productoNombre;
-    }
-
-    public int getProductoCantidad() {
-        return productoCantidad;
-    }
-
-    public void setProductoCantidad(int productoCantidad) {
-        this.productoCantidad = productoCantidad;
-    }
-
-    public String getProductoImagen() {
-        return productoImagen;
-    }
-
-    public void setProductoImagen(String productoImagen) {
-        this.productoImagen = productoImagen;
-    }
-
-    public double getProductoPrecio() {
-        return productoPrecio;
-    }
-
-    public void setProductoPrecio(double productoPrecio) {
-        this.productoPrecio = productoPrecio;
-    }
-
-    public CategoryEntity getTipoCategoria() {
-        return tipoCategoria;
-    }
-
-    public void setTipoCategoria(CategoryEntity tipoCategoria) {
-        this.tipoCategoria = tipoCategoria;
-    }
-    
     
 }
 
