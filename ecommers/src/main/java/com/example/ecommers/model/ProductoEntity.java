@@ -1,11 +1,9 @@
 package com.example.ecommers.model;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.*;
 
-import javax.persistence.*;
 
 @Entity
 @Data
