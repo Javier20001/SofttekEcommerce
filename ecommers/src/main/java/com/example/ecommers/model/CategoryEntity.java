@@ -13,4 +13,6 @@ public class CategoryEntity {
     private Long idCategoria;
     @Column(length = 40, nullable = false)
     private String categoria;
+    @Column(columnDefinition = "boolean default true")
+    private boolean estado;
 }

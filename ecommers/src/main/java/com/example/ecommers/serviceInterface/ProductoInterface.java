@@ -10,6 +10,8 @@ public interface ProductoInterface {
     public List<ProductoEntity> getAllProductos();
 
     public Optional<ProductoEntity> getProductoById(Long id);
+    
+    public ProductoEntity saveProducto(ProductoEntity producto);
 
     public ProductoEntity updateProducto(Long id, ProductoEntity newProducto);
 
