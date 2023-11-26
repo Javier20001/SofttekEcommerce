@@ -3,17 +3,17 @@ package com.example.ecommers.serviceInterface;
 import java.util.List;
 import java.util.Optional;
 
-import com.example.ecommers.model.ProductoEntity;
+import com.example.ecommers.model.ProductEntity;
 
-public interface ProductoInterface {
+public interface ProductInterface {
 
-    public List<ProductoEntity> getAllProductos();
+    public List<ProductEntity> getAllProducts();
 
-    public Optional<ProductoEntity> getProductoById(Long id);
+    public Optional<ProductEntity> getProductById(Long id);
     
-    public ProductoEntity saveProducto(ProductoEntity producto);
+    public ProductEntity saveProduct(ProductEntity product);
 
-    public ProductoEntity updateProducto(Long id, ProductoEntity newProducto);
+    public ProductEntity updateProduct(Long id, ProductEntity newProduct);
 
-    public void deleteProducto(Long id);
+    public void deleteProduct(Long id);
 }

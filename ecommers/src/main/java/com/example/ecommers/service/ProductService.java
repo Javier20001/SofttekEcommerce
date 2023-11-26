@@ -1,8 +1,8 @@
 package com.example.ecommers.service;
 
-import com.example.ecommers.model.ProductoEntity;
-import com.example.ecommers.repository.I_ProductoRepository;
-import com.example.ecommers.serviceInterface.ProductoInterface;
+import com.example.ecommers.model.ProductEntity;
+import com.example.ecommers.repository.I_ProductRepository;
+import com.example.ecommers.serviceInterface.ProductInterface;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,44 +11,44 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ProductoService implements ProductoInterface {
+public class ProductService implements ProductInterface {
 
     @Autowired
-    private I_ProductoRepository productoRepository;
+    private I_ProductRepository productRepository;
 
     // public ProductoService(I_ProductoRepository productoRepository) {
     // this.productoRepository = productoRepository;
     // }
 
-    public List<ProductoEntity> getAllProductos() {
-        return productoRepository.findAll();
+    public List<ProductEntity> getAllProducts() {
+        return productRepository.findAll();
     }
 
-    public Optional<ProductoEntity> getProductoById(Long id) {
-        return productoRepository.findById(id);
+    public Optional<ProductEntity> getProductById(Long id) {
+        return productRepository.findById(id);
     }
 
-    public ProductoEntity saveProducto(ProductoEntity producto) {
-        return productoRepository.save(producto);
+    public ProductEntity saveProduct(ProductEntity producto) {
+        return productRepository.save(producto);
     }
 
-    public ProductoEntity updateProducto(Long id, ProductoEntity newProducto) {
-        return productoRepository.findById(id)
-                .map(existingProducto -> {
-                    existingProducto.setProductoNombre(newProducto.getProductoNombre());
-                    existingProducto.setProductoCantidad(newProducto.getProductoCantidad());
-                    existingProducto.setProductoImagen(newProducto.getProductoImagen());
-                    existingProducto.setProductoPrecio(newProducto.getProductoPrecio());
-                    existingProducto.setTipoCategoria(newProducto.getTipoCategoria());
-                    return productoRepository.save(existingProducto);
+    public ProductEntity updateProduct(Long id, ProductEntity newProduct) {
+        return productRepository.findById(id)
+                .map(existingProduct -> {
+                    existingProduct.setProductName(newProduct.getProductName());
+                    existingProduct.setProductStock(newProduct.getProductStock());
+                    existingProduct.setProductImg(newProduct.getProductImg());
+                    existingProduct.setProductPrice(newProduct.getProductPrice());
+                    existingProduct.setTypeCategory(newProduct.getTypeCategory());
+                    return productRepository.save(existingProduct);
                 })
                 .orElseThrow(() -> new RuntimeException("El producto con ID " + id + " no se encontró"));
     }
 
-    public void deleteProducto(Long id) {
-        productoRepository.findById(id).map(existingProducto -> {
-            existingProducto.setEstado(false);
-            return productoRepository.save(existingProducto);
+    public void deleteProduct(Long id) {
+        productRepository.findById(id).map(existingProduct -> {
+            existingProduct.setStatus(false);
+            return productRepository.save(existingProduct);
         })
                 .orElseThrow(() -> new RuntimeException("El producto con ID " + id + " no se encontró"));
     }
