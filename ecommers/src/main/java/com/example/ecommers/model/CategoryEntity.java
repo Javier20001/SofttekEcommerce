@@ -10,9 +10,9 @@ import lombok.*;
 public class CategoryEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idCategoria;
+    private Long idCategory;
     @Column(length = 40, nullable = false)
-    private String categoria;
-    @Column(columnDefinition = "boolean default true")
-    private boolean estado;
+    private String category;
+    @Column(columnDefinition = "boolean default true",nullable = false)
+    private Boolean status;
 }

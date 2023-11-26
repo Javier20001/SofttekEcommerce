@@ -29,11 +29,11 @@ public class ProductEntity {
     private double productPrice;
 
     @Column(columnDefinition = "boolean default true")
-    private boolean status;
+    private Boolean status;
 
     // Categoría del producto (relación Many-to-One con CategoryEntity)
     @ManyToOne
-    @JoinColumn(name = "category_id", nullable = false)
+    @JoinColumn(name = "id_category", nullable = false)
     private CategoryEntity typeCategory;
 
 }

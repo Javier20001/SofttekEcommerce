@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import com.example.ecommers.model.ProductEntity;
 
-public interface ProductInterface {
+public interface I_ProductService {
 
     public List<ProductEntity> getAllProducts();
 
