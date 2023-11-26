@@ -1,16 +1,14 @@
 package com.example.ecommers.controller;
 
-import com.example.ecommers.model.ProductoEntity;
-import com.example.ecommers.serviceInterface.ProductoInterface;
+import com.example.ecommers.model.ProductEntity;
+import com.example.ecommers.serviceInterface.ProductInterface;
 import com.google.gson.Gson;
 import java.util.List;
-import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,24 +19,24 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping
-public class ProductoController {
+public class ProductController {
     
     @Autowired
-    private ProductoInterface service;
+    private ProductInterface service;
     
     @GetMapping("/")
-    public String listar() {
-        List<ProductoEntity> productos = service.getAllProductos();
+    public String list() {
+        List<ProductEntity> products = service.getAllProducts();
         Gson gson = new Gson();
-        String json = gson.toJson(productos);
+        String json = gson.toJson(products);
         System.out.println();
         return json;
 	}
     
     @PostMapping("/new")
-    public ResponseEntity <?> agregar(@RequestBody ProductoEntity producto){
+    public ResponseEntity <?> add(@RequestBody ProductEntity product){
         try{
-            service.saveProducto(producto);
+            service.saveProduct(product);
         }catch(RuntimeException he){
             throw new RuntimeException("Error en el guardado de producto");
         }
@@ -47,9 +45,9 @@ public class ProductoController {
     
    
     @PostMapping("/update")
-    public ResponseEntity <?> updateProducto(@RequestBody ProductoEntity producto ){
+    public ResponseEntity <?> updateProduct(@RequestBody ProductEntity product ){
         try{
-            service.updateProducto(producto.getIdProducto(), producto);
+            service.updateProduct(product.getIdProduct(), product);
         }catch(RuntimeException he){
             throw new RuntimeException("Error al actualizar");
         }
@@ -58,9 +56,9 @@ public class ProductoController {
     }
     
     @PostMapping("/delete/{id}")
-    public ResponseEntity <?> deleteProducto(@PathVariable Long id){
+    public ResponseEntity <?> deleteProduct(@PathVariable Long id){
         try{
-            service.deleteProducto(id);
+            service.deleteProduct(id);
         }catch(RuntimeException he){
             throw new RuntimeException("Error al eliminar");
         }

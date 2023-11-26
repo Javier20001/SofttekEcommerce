@@ -7,33 +7,33 @@ import lombok.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductoEntity {
+public class ProductEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idProducto;
+    private Long idProduct;
 
     // nombre del producto
     @Column(length = 100, nullable = false)
-    private String productoNombre;
+    private String productName;
 
     // Cantidad disponible en el inventario
     @Column(nullable = false)
-    private int productoCantidad;
+    private int productStock;
 
     // Imagen asociada al producto
     @Column(length = 200)
-    private String productoImagen;
+    private String productImg;
 
     // Precio del producto
     @Column(nullable = false)
-    private double productoPrecio;
+    private double productPrice;
 
     @Column(columnDefinition = "boolean default true")
-    private boolean estado;
+    private boolean status;
 
     // Categoría del producto (relación Many-to-One con CategoryEntity)
     @ManyToOne
-    @JoinColumn(name = "categoria_id", nullable = false)
-    private CategoryEntity tipoCategoria;
+    @JoinColumn(name = "category_id", nullable = false)
+    private CategoryEntity typeCategory;
 
 }
