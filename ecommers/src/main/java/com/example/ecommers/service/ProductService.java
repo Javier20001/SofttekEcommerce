@@ -12,32 +12,79 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Service class implementing the business logic for managing products.
+ *
+ * This class is annotated with @Service to indicate that it is a service component in the Spring application context.
+ * It implements the I_ProductService interface to provide the required functionality.
+ *
+ * @Service Indicates that this class is a Spring service component.
+ * @see com.example.ecommers.serviceInterface.I_ProductService
+ */
 @Service
 public class ProductService implements I_ProductService {
 
+    /**
+     * Repository interface for accessing and managing product entities in the database.
+     */
     @Autowired
     private I_ProductRepository productRepository;
+
+    /**
+     * Service interface for handling category-related business logic.
+     */
     @Autowired
     private I_CategoryService categoryService;
-    // public ProductoService(I_ProductoRepository productoRepository) {
-    // this.productoRepository = productoRepository;
-    // }
 
+    /**
+     * Retrieves a list of all products.
+     *
+     * @return List<ProductEntity> A list of all products.
+     * @see com.example.ecommers.model.ProductEntity
+     * @see com.example.ecommers.repository.I_ProductRepository#findAll()
+     */
     public List<ProductEntity> getAllProducts() {
         return productRepository.findAll();
     }
 
+    /**
+     * Retrieves a product by its identifier.
+     *
+     * @param id The identifier of the product.
+     * @return Optional<ProductEntity> An Optional containing the product, or empty if not found.
+     * @see com.example.ecommers.model.ProductEntity
+     * @see com.example.ecommers.repository.I_ProductRepository#findById(Object)
+     */
     public Optional<ProductEntity> getProductById(Long id) {
         return productRepository.findById(id);
     }
 
+    /**
+     * Saves a new product.
+     *
+     * @param product The product entity to be saved.
+     * @return ProductEntity The saved product.
+     * @see com.example.ecommers.model.ProductEntity
+     * @see com.example.ecommers.repository.I_ProductRepository#save(Object)
+     */
     public ProductEntity saveProduct(ProductEntity product) {
-        ProductEntity productEntitys=saveCategory(product);
+        ProductEntity productEntity = saveCategory(product);
         product.setStatus(true);
-        // Guardar el producto después de manejar la categoría
-        return productRepository.save(productEntitys);
+        // Save the product after handling the category
+        return productRepository.save(productEntity);
     }
 
+    /**
+     * Updates an existing product.
+     *
+     * @param id        The identifier of the product to be updated.
+     * @param newProduct The updated product entity.
+     * @return ProductEntity The updated product.
+     * @throws RuntimeException if the product with the specified ID is not found.
+     * @see com.example.ecommers.model.ProductEntity
+     * @see com.example.ecommers.repository.I_ProductRepository#findById(Object)
+     * @see com.example.ecommers.repository.I_ProductRepository#save(Object)
+     */
     public ProductEntity updateProduct(Long id, ProductEntity newProduct) {
         return productRepository.findById(id)
                 .map(existingProduct -> {
@@ -45,20 +92,39 @@ public class ProductService implements I_ProductService {
                     existingProduct.setProductStock(newProduct.getProductStock());
                     existingProduct.setProductImg(newProduct.getProductImg());
                     existingProduct.setProductPrice(newProduct.getProductPrice());
-                    existingProduct=saveCategory(newProduct);
+                    existingProduct = saveCategory(newProduct);
                     return productRepository.save(existingProduct);
                 })
-                .orElseThrow(() -> new RuntimeException("El producto con ID " + id + " no se encontró"));
+                .orElseThrow(() -> new RuntimeException("Id product " + id + " not found"));
     }
 
+    /**
+     * Deletes a product by its identifier.
+     *
+     * @param id The identifier of the product to be deleted.
+     * @throws RuntimeException if the product with the specified ID is not found.
+     * @see com.example.ecommers.repository.I_ProductRepository#findById(Object)
+     * @see com.example.ecommers.repository.I_ProductRepository#save(Object)
+     */
     public void deleteProduct(Long id) {
-        productRepository.findById(id).map(existingProduct -> {
-            existingProduct.setStatus(false);
-            return productRepository.save(existingProduct);
-        })
-                .orElseThrow(() -> new RuntimeException("El producto con ID " + id + " no se encontró"));
+        productRepository.findById(id)
+                .map(existingProduct -> {
+                    existingProduct.setStatus(false);
+                    return productRepository.save(existingProduct);
+                })
+                .orElseThrow(() -> new RuntimeException("Id product \" + id + \" not found"));
     }
-    private ProductEntity saveCategory(ProductEntity product){
+
+    /**
+     * Helper method to handle the category associated with a product.
+     *
+     * @param product The product entity to be processed.
+     * @return ProductEntity The product entity with the associated category handled.
+     * @see com.example.ecommers.model.ProductEntity
+     * @see com.example.ecommers.serviceInterface.I_CategoryService#getCategoryById(Long)
+     * @see com.example.ecommers.serviceInterface.I_CategoryService#saveCategory(CategoryEntity)
+     */
+    private ProductEntity saveCategory(ProductEntity product) {
         CategoryEntity categoryEntity = product.getTypeCategory();
         Optional<CategoryEntity> existingCategory = categoryService.getCategoryById(categoryEntity.getIdCategory());
 
@@ -73,3 +139,4 @@ public class ProductService implements I_ProductService {
         return product;
     }
 }
+
