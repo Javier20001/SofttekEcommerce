@@ -20,6 +20,7 @@ public class CategoryService implements I_CategoryService {
         return categoryRepository.findAll();
     }
 
+    @Override
     public Optional<CategoryEntity> getCategoryById(Long id) {
         if (id != null) {
             return categoryRepository.findById(id);
