@@ -1,32 +1,32 @@
 package com.example.ecommers.controller;
 
 import com.example.ecommers.model.CategoryEntity;
-import com.example.ecommers.service.CategoriaService;
-import com.example.ecommers.serviceInterface.InterCategoriaService;
+import com.example.ecommers.service.CategoryService;
+import com.example.ecommers.serviceInterface.I_CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
-@RequestMapping
+@RequestMapping("/api/v1/category")
+@CrossOrigin(origins = "http://localhost:5173")
 public class CategoryController {
 
-    private final InterCategoriaService categoriaService;
+    private final I_CategoryService categoryService;
 
     @Autowired
-    public CategoryController(CategoriaService categoriaService) {
-        this.categoriaService = categoriaService;
+    public CategoryController(CategoryService categoryService) {
+        this.categoryService = categoryService;
     }
     
     //Lista las categorias
-    @GetMapping("/Category")
+    @GetMapping("/list")
     public ResponseEntity<List<CategoryEntity>> getAllCategorias() {
-        List<CategoryEntity> categorias = categoriaService.getAllCategorias();
-        return new ResponseEntity<>(categorias, HttpStatus.OK);
+        List<CategoryEntity> categories = categoryService.getAllCategory();
+        return new ResponseEntity<>(categories, HttpStatus.OK);
     }
     
     //Muestra una categoria en particular
@@ -39,23 +39,23 @@ public class CategoryController {
     
   
     //Save de categoria
-    @PostMapping
-    public ResponseEntity<CategoryEntity> saveCategoria(@RequestBody CategoryEntity categoria) {
-        CategoryEntity savedCategoria = categoriaService.saveCategoria(categoria);
-        return new ResponseEntity<>(savedCategoria, HttpStatus.CREATED);
+    @PostMapping("/new")
+    public ResponseEntity<CategoryEntity> saveCategory(@RequestBody CategoryEntity category) {
+        CategoryEntity savedCategory = categoryService.saveCategory(category);
+        return new ResponseEntity<>(savedCategory, HttpStatus.CREATED);
     }
     
     //Update de categoria
-    @PutMapping("/Category/Update/{id}")
-    public ResponseEntity<CategoryEntity> updateCategoria(@PathVariable Long id, @RequestBody CategoryEntity newCategoria) {
-        CategoryEntity updatedCategoria = categoriaService.updateCategoria(id, newCategoria);
-        return new ResponseEntity<>(updatedCategoria, HttpStatus.OK);
+    @PutMapping("update/{id}")
+    public ResponseEntity<CategoryEntity> updateCategory(@PathVariable Long id, @RequestBody CategoryEntity newCategory) {
+        CategoryEntity updatedCategory = categoryService.updateCategory(id, newCategory);
+        return new ResponseEntity<>(updatedCategory, HttpStatus.OK);
     }
     
     //Delete de categoria
-    @DeleteMapping("/Category/Delete/{id}")
-    public ResponseEntity<Void> deleteCategoria(@PathVariable Long id) {
-        categoriaService.deleteCategoria(id);
+    @DeleteMapping("delete/{id}")
+    public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
+        categoryService.deleteCategory(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
