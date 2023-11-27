@@ -18,21 +18,41 @@ public class CategoryInitializer implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
         if (i_categoryRepository.count() == 0) {
-                CategoryEntity category = new CategoryEntity();
-                category.setIdCategoria(1L);
-                category.setCategoria("mouse");
-                category.setEstado(true);
-                i_categoryRepository.save(category);
-                CategoryEntity category2 = new CategoryEntity();
-                category2.setIdCategoria(2L);
-                category2.setCategoria("keyboard");
-                category2.setEstado(true);
-                i_categoryRepository.save(category2);
-                CategoryEntity category3 = new CategoryEntity();
-                category3.setIdCategoria(3L);
-                category3.setCategoria("monitor");
-                category3.setEstado(true);
-                i_categoryRepository.save(category3);
+            CategoryEntity category = new CategoryEntity();
+            category.setIdCategory(1L);
+            category.setCategory("mouse");
+            category.setStatus(true);
+            i_categoryRepository.save(category);
+            CategoryEntity category2 = new CategoryEntity();
+            category2.setIdCategory(2L);
+            category2.setCategory("keyboard");
+            category2.setStatus(true);
+            i_categoryRepository.save(category2);
+            CategoryEntity category3 = new CategoryEntity();
+            category3.setIdCategory(3L);
+            category3.setCategory("monitor");
+            category3.setStatus(true);
+            i_categoryRepository.save(category3);
+            CategoryEntity category4 = new CategoryEntity();
+            category4.setIdCategory(4L);
+            category4.setCategory("ram");
+            category4.setStatus(true);
+            i_categoryRepository.save(category4);
+            CategoryEntity category5 = new CategoryEntity();
+            category5.setIdCategory(5L);
+            category5.setCategory("CPU");
+            category5.setStatus(true);
+            i_categoryRepository.save(category5);
+            CategoryEntity category6 = new CategoryEntity();
+            category6.setIdCategory(6L);
+            category6.setCategory("GPU");
+            category6.setStatus(true);
+            i_categoryRepository.save(category6);
+            CategoryEntity category7 = new CategoryEntity();
+            category7.setIdCategory(7L);
+            category7.setCategory("motherboard");
+            category7.setStatus(true);
+            i_categoryRepository.save(category7);
         }
     }
 }
