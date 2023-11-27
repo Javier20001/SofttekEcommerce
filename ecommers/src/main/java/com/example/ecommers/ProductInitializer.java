@@ -24,9 +24,9 @@ public class ProductInitializer implements ApplicationRunner {
         if (i_productRepository.count() == 0) {
             CategoryEntity category = i_categoryRepository.findById(1L).orElseGet(() -> {
                 CategoryEntity newCategory = new CategoryEntity();
-                newCategory.setIdCategoria(1L);
-                newCategory.setCategoria("mouse");
-                newCategory.setEstado(true);
+                newCategory.setIdCategory(1L);
+                newCategory.setCategory("mouse");
+                newCategory.setStatus(true);
                 return i_categoryRepository.save(newCategory);
             });
             for (int i = 0; i < 10; i++) {
