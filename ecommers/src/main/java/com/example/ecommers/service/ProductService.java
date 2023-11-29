@@ -152,5 +152,12 @@ public class ProductService implements I_ProductService {
     }
 
 
+    public List<ProductEntity> findByStatusTrue() {
+        return productRepository.findByStatusTrue();
+    }
+
+
+
+
 
 }
