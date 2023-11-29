@@ -94,11 +94,19 @@ public class ProductController {
     @PostMapping("/delete/{id}")
     public ResponseEntity<?> deleteProduct(@PathVariable Long id){
         try{
+
             service.deleteProduct(id);
+
         }catch(RuntimeException he){
             throw new RuntimeException("Error al eliminar");
         }
         return new ResponseEntity<>("Se eliminó correctamente", HttpStatus.OK);
     }
+    @GetMapping("/find/{name}")
+    public String find(@PathVariable String name){
+        List<ProductEntity> ltsE = service.findByProductNameContainingIgnoreCase(name);
+        Gson gson = new Gson();
+        String json = gson.toJson(ltsE);
+        return json;
+    }
 }
-
