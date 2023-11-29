@@ -55,5 +55,8 @@ public interface I_ProductService {
      * @throws RuntimeException if the product with the specified ID is not found.
      */
     void deleteProduct(Long id);
+
+
+     List<ProductEntity> findByProductNameContainingIgnoreCase(String name);
 }
 

@@ -7,8 +7,7 @@ import com.example.ecommers.serviceInterface.I_CategoryService;
 import com.example.ecommers.serviceInterface.I_ProductService;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
+import org.springframework.stereotype.Service;import org.springframework.data.repository.query.Param;
 import java.util.List;
 import java.util.Optional;
 
@@ -77,7 +76,7 @@ public class ProductService implements I_ProductService {
     /**
      * Updates an existing product.
      *
-     * @param id        The identifier of the product to be updated.
+     * @param id         The identifier of the product to be updated.
      * @param newProduct The updated product entity.
      * @return ProductEntity The updated product.
      * @throws RuntimeException if the product with the specified ID is not found.
@@ -138,5 +137,20 @@ public class ProductService implements I_ProductService {
         }
         return product;
     }
-}
 
+
+    // Method to search products by name with partial match
+    public List<ProductEntity> findByProductNameContainingIgnoreCase(String name) {
+
+        if (name != null) {
+
+            name = name.substring(0,3);
+            return productRepository.findByProductNameContainingIgnoreCase(name);
+        } else {
+            return null;
+        }
+    }
+
+
+
+}
