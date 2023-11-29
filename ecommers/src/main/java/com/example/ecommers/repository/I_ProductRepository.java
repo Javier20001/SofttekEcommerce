@@ -21,9 +21,10 @@ import java.util.List;
 public interface I_ProductRepository extends JpaRepository<ProductEntity, Long> {
 
     // Consulta personalizada usando la cláusula LIKE
-    @Query("SELECT p FROM ProductEntity p WHERE LOWER(p.productName) LIKE LOWER(concat('%', :name, '%')) AND LENGTH(:name) >= 3")
+    @Query("SELECT p FROM ProductEntity p WHERE LOWER(p.productName) LIKE LOWER(concat('%', :name, '%')) AND LENGTH(:name) >= 3 AND p.status = true")
     List<ProductEntity> findByProductNameContainingIgnoreCase(@Param("name") String name);
 
 
-
+    @Query("SELECT p FROM ProductEntity  p where (p.status = true ) ")
+    List<ProductEntity> findByStatusTrue ();
 }

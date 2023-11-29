@@ -41,7 +41,7 @@ public class ProductController {
      */
     @GetMapping("/list")
     public String list() {
-        List<ProductEntity> products = service.getAllProducts();
+        List<ProductEntity> products = service.findByStatusTrue();
         Gson gson = new Gson();
         String json = gson.toJson(products);
         System.out.println(); // This line seems unnecessary; consider removing or adding a comment explaining its purpose.
