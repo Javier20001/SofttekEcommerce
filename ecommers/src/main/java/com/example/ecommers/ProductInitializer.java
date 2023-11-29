@@ -62,14 +62,14 @@ public class ProductInitializer implements ApplicationRunner {
                 CategoryEntity newCategory6 = new CategoryEntity(6L,"monitor",true);
                 return i_categoryRepository.save(newCategory6);
             });
-            ProductEntity product6 = new ProductEntity(6L,"Asus ultra HD",2,"https://cdn.thewirecutter.com/wp-content/media/2021/05/27-inch-monitor-2048px-1567-2x1-1.jpg?auto=webp&quality=75&crop=2:1&width=980&dpr=2",12500,true,category6);
+            ProductEntity product6 = new ProductEntity(6L,"Asus ultra HD",2,"https://img.freepik.com/free-photo/view-computer-monitor-with-gradient-display_23-2150757379.jpg",12500,true,category6);
             i_productRepository.save(product6);
             //--------------------------------------------------------------------------------------------------------------------------
             CategoryEntity category7 = i_categoryRepository.findById(7L).orElseGet(() -> {
                 CategoryEntity newCategory7 = new CategoryEntity(7L,"motherboard",true);
                 return i_categoryRepository.save(newCategory7);
             });
-            ProductEntity product7 = new ProductEntity(6L,"Msi a320m pro",2,"https://nutnullpc.com/images/thumbs/0001604_msi-a320m-pro-e-motherboard.png",5500,true,category7);
+            ProductEntity product7 = new ProductEntity(7L,"Msi a320m pro",2,"https://nutnullpc.com/images/thumbs/0001604_msi-a320m-pro-e-motherboard.png",5500,true,category7);
             i_productRepository.save(product7);
         }
     }
