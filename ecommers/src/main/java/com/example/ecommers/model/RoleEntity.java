@@ -25,8 +25,4 @@ public class RoleEntity {
     @Enumerated(EnumType.STRING)
     private RolesName name;
 
-    // Relación Many-to-Many con la entidad User, mapeada por el atributo 'roles' en User
-    @ManyToMany(mappedBy = "roles")
-    private List<UserEntity> users;
-
 }

@@ -1,5 +1,6 @@
 package com.example.ecommers.controller;
 
+import com.example.ecommers.config.SecurityConfig;
 import com.example.ecommers.model.CategoryEntity;
 import com.example.ecommers.model.ProductEntity;
 import com.example.ecommers.serviceInterface.I_CategoryService;
@@ -7,6 +8,9 @@ import com.example.ecommers.serviceInterface.I_ProductService;
 import com.google.gson.Gson;
 import java.util.List;
 
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +29,8 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/product")
 @CrossOrigin(origins = "http://localhost:5173")
+@NoArgsConstructor
+@AllArgsConstructor
 public class ProductController {
 
     /**
@@ -32,6 +38,9 @@ public class ProductController {
      */
     @Autowired
     private I_ProductService service;
+
+    @Autowired
+    private SecurityConfig securityConfig;
 
     /**
      * Retrieves a list of all products.
@@ -108,5 +117,17 @@ public class ProductController {
         Gson gson = new Gson();
         String json = gson.toJson(ltsE);
         return json;
+    }
+
+    /**
+     * Endpoint for user logout, invalidating the current token.
+     *
+     * @param request The HttpServletRequest for the current user session.
+     * @return ResponseEntity indicating successful logout.
+     */
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(HttpServletRequest request) {
+        securityConfig.invalidateToken();
+        return ResponseEntity.ok("Logout successful");
     }
 }

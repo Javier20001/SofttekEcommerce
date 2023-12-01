@@ -19,10 +19,10 @@ import io.swagger.v3.oas.annotations.servers.Server;
 @OpenAPIDefinition(
         info = @Info(
                 contact = @Contact(
-                        name = "HardTek team",
-                        email = "hardtek@gmail.com"
+                        name = "Prest team",
+                        email = "prestteam@gmail.com"
                 ),
-                description = "OpenApi doc HardTek",
+                description = "OpenApi doc prestService",
                 title = "OpenApi DOC",
                 version = "1.0"
         ),
@@ -37,21 +37,16 @@ import io.swagger.v3.oas.annotations.servers.Server;
                 )
         }
 )
+@SecurityScheme(
+        name = "bearerAuth",
+        description = "JWT auth description",
+        scheme = "bearer",
+        type = SecuritySchemeType.HTTP,
+        bearerFormat = "JWT",
+        in = SecuritySchemeIn.HEADER
+)
 public class OpenApiConfig {
 
-    // The class is intentionally left empty as it serves as a configuration class.
-    // You may uncomment and modify the @SecurityScheme annotation for JWT authentication.
 
-    // Uncomment and modify the following lines if JWT authentication is used.
-    /*
-    @SecurityScheme(
-            name = "bearerAuth",
-            description = "JWT auth description",
-            scheme = "bearer",
-            type = SecuritySchemeType.HTTP,
-            bearerFormat = "JWT",
-            in = SecuritySchemeIn.HEADER
-    )
-    */
 }
 

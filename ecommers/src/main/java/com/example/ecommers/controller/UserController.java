@@ -1,4 +1,4 @@
-/*
+
 package com.example.ecommers.controller;
 
 import com.example.ecommers.model.UserEntity;
@@ -10,23 +10,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/user")
+@RequestMapping("/api/v1/admin/user")
 @CrossOrigin(origins = "http://localhost:5173")
 public class UserController {
-
 
     private final I_UserService userService;
 
     @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
-    }
-
-    //Agrega un nuevo usario
-    @PostMapping("/new")
-    public ResponseEntity<UserEntity> saveUser(@RequestBody UserEntity user) {
-        UserEntity savedUser = userService.saveUser(user);
-        return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
     }
 
     //Update de usuario existente
@@ -42,11 +34,7 @@ public class UserController {
         userService.deleteUser(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
-
-
-
 }
 
 
- */
+
