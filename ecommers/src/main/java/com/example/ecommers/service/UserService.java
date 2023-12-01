@@ -5,9 +5,11 @@ import com.example.ecommers.model.UserEntity;
 import com.example.ecommers.repository.I_UserRepository;
 import com.example.ecommers.serviceInterface.I_UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@Service
 public class UserService implements I_UserService {
 
     @Autowired
@@ -51,9 +53,7 @@ public class UserService implements I_UserService {
 
     //Envia un email para recuperar la contraseña
     public Optional<UserEntity> findUserByEmail(String email) {
-
-
-        return null;
+        return userRepository.findUserByEmail(email);
     }
 
 }
