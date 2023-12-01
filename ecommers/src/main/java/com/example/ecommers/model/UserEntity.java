@@ -2,6 +2,7 @@ package com.example.ecommers.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import java.util.List;
 
 import java.util.List;
 
@@ -32,5 +33,5 @@ public class UserEntity {
     private List<RoleEntity> roles;
     
     @Column(columnDefinition = "boolean default true")
-    private boolean state;
+    private boolean status;
 }
