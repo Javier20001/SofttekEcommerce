@@ -6,6 +6,8 @@ import com.example.ecommers.dto.LoginUserDTO;
 import com.example.ecommers.dto.RegisterUserDTO;
 import com.example.ecommers.model.UserEntity;
 import com.example.ecommers.security.JwtUtil;
+import com.example.ecommers.service.AuthServiceImpl;
+import com.example.ecommers.serviceInterface.I_AuthService;
 import com.example.ecommers.serviceInterface.I_UserService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -37,6 +39,8 @@ public class AuthController {
 
     @Autowired
     private I_UserService userService;
+    @Autowired
+    private AuthServiceImpl authService;
 
     @Autowired
     private JwtUtil jwtUtil;
@@ -53,6 +57,8 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginUserDTO loginUserDto) {
         try {
+            System.out.println("HOLA 1");
+            System.out.println(loginUserDto.toString());
             // Authenticate the user using provided credentials
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
@@ -60,15 +66,16 @@ public class AuthController {
                             loginUserDto.getPassword()
                     )
             );
+            System.out.println("HOLA 2");
 
             // Set the authentication in the security context
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
             // Generate JWT token
             String token = jwtUtil.generateAccesToken(loginUserDto.getEmail());
-
+            System.out.println("HOLA 3");
             // Return JWT token and user details in the response
-            UserEntity currentUser = userService.findUserByEmail(loginUserDto.getEmail()).get();
+            UserEntity currentUser = authService.findByEmail(loginUserDto.getEmail()).get();
             LoginResponseUserDTO loginResponseUserDTO = new LoginResponseUserDTO(
                     currentUser.getUserName(),
                     currentUser.getRoles().stream().map(role -> String.valueOf(role.getName())).toList()
@@ -94,6 +101,8 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<?> createUser(@Valid @RequestBody RegisterUserDTO registerUserDto) {
         try {
+            UserEntity user = new UserEntity(0L,registerUserDto.getUserName(), registerUserDto.getEmail(), registerUserDto.getPassword() , authService.setRole(registerUserDto.getRoles()),true);
+            authService.save(registerUserDto);
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             registerUserDto.getEmail(),
@@ -106,8 +115,6 @@ public class AuthController {
             // Generate JWT token
             String token = jwtUtil.generateAccesToken(registerUserDto.getEmail());
 
-            UserEntity user = new UserEntity(0L,registerUserDto.getUserName(), registerUserDto.getEmail(), registerUserDto.getPassword() , registerUserDto.getRoles(),true);
-            userService.saveUser(user);
             LoginResponseUserDTO loginResponseUserDTO = new LoginResponseUserDTO(
                     user.getUserName(),
                     user.getRoles().stream().map(role -> String.valueOf(role.getName())).toList()
@@ -116,10 +123,9 @@ public class AuthController {
                     token,
                     loginResponseUserDTO
             );
-
             return ResponseEntity.ok().body(loginResponseDTO);
-
         } catch (RuntimeException re) {
+            re.printStackTrace();
             return ResponseEntity.status(HttpStatus.CONFLICT)
                     .body(Collections.singletonMap("error", "This user already exists"));
         }

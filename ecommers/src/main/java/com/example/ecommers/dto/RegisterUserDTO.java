@@ -24,5 +24,5 @@ public class RegisterUserDTO {
     @NotNull(message = "Email must not be null")
     private String email;
     @NotEmpty(message = "The user must have at least 1 role")
-    private List<RoleEntity> roles;
+    private List<Long> roles;
 }

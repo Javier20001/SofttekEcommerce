@@ -33,5 +33,5 @@ public class UserEntity {
     private List<RoleEntity> roles;
     
     @Column(columnDefinition = "boolean default true")
-    private boolean status;
+    private Boolean status;
 }

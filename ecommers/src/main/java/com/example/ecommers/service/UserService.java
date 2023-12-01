@@ -21,11 +21,6 @@ public class UserService implements I_UserService {
     }
 
     //Guarda un usuario
-    public UserEntity saveUser(UserEntity user) {
-        UserEntity userEntity = saveUser(user);
-        user.setStatus(true);
-        return userRepository.save(userEntity);
-    }
     //Update de usuario existente
     public UserEntity updateUser(Long id, UserEntity newUser) {
         return userRepository.findById(id)
@@ -34,8 +29,7 @@ public class UserService implements I_UserService {
                     existingUser.setEmail(newUser.getEmail());
                     existingUser.setPassword(newUser.getPassword());
                     existingUser.setRoles(newUser.getRoles());
-                    existingUser.setStatus(newUser.isStatus());
-                    existingUser = saveUser(newUser);
+                    existingUser.setStatus(newUser.getStatus());
                     return userRepository.save(existingUser);
                 })
                 .orElseThrow(() -> new RuntimeException("Id User " + id + " not found"));
@@ -49,11 +43,6 @@ public class UserService implements I_UserService {
                     return userRepository.save(existingUser);
                 })
                 .orElseThrow(() -> new RuntimeException("Id user \" + id + \" not found"));
-    }
-
-    //Envia un email para recuperar la contraseña
-    public Optional<UserEntity> findUserByEmail(String email) {
-        return userRepository.findUserByEmail(email);
     }
 
 }

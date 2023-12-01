@@ -66,7 +66,16 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> {
                     auth
                             .requestMatchers("/api/v1/auth/**").permitAll()
+                            .requestMatchers("/api/v1/product/list").permitAll()
+                            .requestMatchers("/api/v1/product/find/{name}").permitAll()
+                            .requestMatchers("/api/v1/category/list").permitAll()
+                            .requestMatchers("/api/v1/category/new").hasRole("Admin")
+                            .requestMatchers("/api/v1/category/update/{id}").hasRole("Admin")
+                            .requestMatchers("/api/v1/category/delete/{id}").hasRole("Admin")
                             .requestMatchers("/api/v1/admin/**").hasRole("Admin")
+                            .requestMatchers("/api/v1/product/new").hasRole("Admin")
+                            .requestMatchers("/api/v1/product/update").hasRole("Admin")
+                            .requestMatchers("/api/v1/product/delete/{id}").hasRole("Admin")
                             .requestMatchers("/api/v1/users").authenticated()
                             .anyRequest().permitAll();
                 })
@@ -122,7 +131,6 @@ public class SecurityConfig {
     public String getUserNameFromToken(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (!(authentication instanceof AnonymousAuthenticationToken)) {
-            System.out.println(authentication.getName().toString());
             return authentication.getName();
         }
         return null;
@@ -139,7 +147,7 @@ public class SecurityConfig {
             // Agrega la lógica para marcar el token como inválido (por ejemplo, agregar a una lista negra)
             // Esto dependerá de cómo estás manejando la validez de los tokens en tu aplicación
             // Puedes tener una lista en memoria, una base de datos, etc.
-            // jwtUtil.addToBlacklist(token);
+//             jwtUtil.addToBlacklist(token);
             System.out.println("Token invalidado: " + token);
         } else {
             System.out.println("No hay un usuario autenticado con un token JWT.");

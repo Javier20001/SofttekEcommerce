@@ -16,5 +16,5 @@ public interface I_UserRepository extends JpaRepository<UserEntity, Long> {
 
     //Busca dentro de la tabla de usuario el mail que se le pasa.
     @Query("SELECT p FROM UserEntity p WHERE LOWER(p.email) = LOWER(:email) AND p.status = true AND p.email LIKE '%@%'")
-    Optional<UserEntity> findUserByEmail(@Param("email") String email);
+    Optional<UserEntity> findByEmail(@Param("email") String email);
 }
