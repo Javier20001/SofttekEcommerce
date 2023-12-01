@@ -21,7 +21,7 @@ public class UserController {
     }
 
     @PostMapping("/new")
-    public ResponseEntity<UserEntity> saveCategory(@RequestBody UserEntity user) {
+    public ResponseEntity<UserEntity> saveUser(@RequestBody UserEntity user) {
         UserEntity savedUser = userService.saveUser(user);
         return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
     }
