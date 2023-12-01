@@ -38,8 +38,6 @@ import java.util.Map;
 public class AuthController {
 
     @Autowired
-    private I_UserService userService;
-    @Autowired
     private AuthServiceImpl authService;
 
     @Autowired
@@ -57,8 +55,6 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginUserDTO loginUserDto) {
         try {
-            System.out.println("HOLA 1");
-            System.out.println(loginUserDto.toString());
             // Authenticate the user using provided credentials
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
@@ -66,14 +62,13 @@ public class AuthController {
                             loginUserDto.getPassword()
                     )
             );
-            System.out.println("HOLA 2");
 
             // Set the authentication in the security context
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
             // Generate JWT token
             String token = jwtUtil.generateAccesToken(loginUserDto.getEmail());
-            System.out.println("HOLA 3");
+
             // Return JWT token and user details in the response
             UserEntity currentUser = authService.findByEmail(loginUserDto.getEmail()).get();
             LoginResponseUserDTO loginResponseUserDTO = new LoginResponseUserDTO(
