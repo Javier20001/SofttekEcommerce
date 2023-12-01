@@ -3,6 +3,7 @@ package com.example.ecommers.model;
 import lombok.*;
 import jakarta.persistence.*;
 
+import java.util.List;
 
 
 /**
@@ -25,6 +26,6 @@ public class RoleEntity {
 
     // Relación Many-to-Many con la entidad User, mapeada por el atributo 'roles' en User
     @ManyToMany(mappedBy = "roles")
-    private List<User> users;
+    private List<UserEntity> users;
 
 }

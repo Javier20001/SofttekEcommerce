@@ -11,13 +11,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 /**
  * Controller class for handling operations related to product categories.
- *
+
  * This class is responsible for managing CRUD (Create, Read, Update, Delete) operations
  * for product categories and exposes corresponding API endpoints.
  *
  * @RestController Indicates that this class is a controller for handling HTTP requests.
  * @RequestMapping("/api/v1/category") Base mapping for all endpoints in this controller.
- * @CrossOrigin(origins = "http://localhost:5173") Configures Cross-Origin Resource Sharing (CORS) for the controller.
+ * @CrossOrigin(origins = "<a href="http://localhost:5173">...</a>") Configures Cross-Origin Resource Sharing (CORS) for the controller.
  */
 @RestController
 @RequestMapping("/api/v1/category")

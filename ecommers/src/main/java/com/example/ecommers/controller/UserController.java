@@ -1,3 +1,4 @@
+/*
 package com.example.ecommers.controller;
 
 import com.example.ecommers.model.UserEntity;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/user")
 @CrossOrigin(origins = "http://localhost:5173")
 public class UserController {
+
 
     private final I_UserService userService;
 
@@ -42,3 +44,6 @@ public class UserController {
 
 
 }
+
+
+ */

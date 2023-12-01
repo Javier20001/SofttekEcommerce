@@ -73,11 +73,33 @@ class ProductServiceTest {
         final Long id = 1L;
         when(productRepository.getReferenceById(id)).thenReturn(product);
 
-        final Optional <ProductEntity> result = sut.getProductById(id);
+        final Optional<ProductEntity> result = sut.getProductById(id);
 
         assertAll(
                 () -> assertNotNull(result)
-
         );
     }
+
+    @Test
+    @DisplayName("Given a product when product service calls saveProduct method then product should be saved")
+    void saveProduct() {
+
+
+        // Mocking behavior for the saveCategory method
+        when(sut.saveProduct(product)).thenReturn(product);
+
+        // Mocking behavior for the productRepository.save method
+        when(productRepository.save(product)).thenReturn(product);
+
+        // When
+        ProductEntity savedProduct = sut.saveProduct(product);
+
+        // Then
+        assertAll(
+                () -> assertNotNull(savedProduct),
+                () -> assertTrue(savedProduct.getStatus()) // Ensure status is set to true
+                // Add more assertions if needed
+        );
+    }
+
 }
