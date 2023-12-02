@@ -3,6 +3,8 @@ package com.example.ecommers.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
+
 /**
  * Entity class representing a product.
  *
@@ -60,7 +62,7 @@ public class ProductEntity {
      * @Column(nullable = false) Specifies the column constraints for the product price.
      */
     @Column(nullable = false)
-    private double productPrice;
+    private BigDecimal productPrice;
 
     /**
      * The status of the product.
