@@ -3,6 +3,7 @@ package com.example.ecommers.controller;
 import com.example.ecommers.config.SecurityConfig;
 import com.example.ecommers.model.CategoryEntity;
 import com.example.ecommers.model.ProductEntity;
+import com.example.ecommers.service.AuthServiceImpl;
 import com.example.ecommers.serviceInterface.I_CategoryService;
 import com.example.ecommers.serviceInterface.I_ProductService;
 import com.google.gson.Gson;

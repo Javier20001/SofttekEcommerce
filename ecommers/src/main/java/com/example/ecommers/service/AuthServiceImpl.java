@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -48,6 +49,8 @@ public class AuthServiceImpl implements I_AuthService {
      */
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired EmailService emailService;
 
     /**
      * Saves a new user based on the provided RegisterUserDTO.
@@ -95,6 +98,31 @@ public class AuthServiceImpl implements I_AuthService {
         }
         return userEntity;
     }
+
+    @Override
+    public void resetRequest(String email) {
+        Optional<UserEntity> optUser = userRepository.findByEmail(email);
+        if(optUser.isPresent()){
+            UserEntity user = optUser.get();
+            user.setResetToken(UUID.randomUUID().toString());
+            user.setExpirationDate(LocalDateTime.now().plusHours(2));
+            userRepository.save(user);
+            emailService.sendEmail(email, "Password Recovery", "Hello, this is your reset request email. To reset your password, visit localhost:5173/password/new/"+user.getResetToken());
+        }else{
+            System.out.println("error user not found");
+        }
+    }
+    public void resetPassword(String token, String password){
+        Optional<UserEntity> optUser = userRepository.findByToken(token);
+        if(optUser.isPresent()){
+            UserEntity user = optUser.get();
+            user.setPassword(passwordEncoder.encode(password));
+            userRepository.save(user);
+        }else{
+            System.out.println("error");
+        }
+    }
+
 
     /**
      * Sets roles for a user based on the provided role IDs.

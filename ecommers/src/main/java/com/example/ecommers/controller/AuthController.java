@@ -7,6 +7,7 @@ import com.example.ecommers.dto.RegisterUserDTO;
 import com.example.ecommers.model.UserEntity;
 import com.example.ecommers.security.JwtUtil;
 import com.example.ecommers.service.AuthServiceImpl;
+import com.example.ecommers.service.UserService;
 import com.example.ecommers.serviceInterface.I_AuthService;
 import com.example.ecommers.serviceInterface.I_UserService;
 import jakarta.validation.Valid;
@@ -31,7 +32,7 @@ import java.util.Map;
  * This class represents the REST controller for handling authentication and user registration.
  */
 @RestController
-@CrossOrigin(origins = "http://localhost:8080")
+@CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/api/v1/auth")
 @AllArgsConstructor
 @NoArgsConstructor
@@ -45,6 +46,9 @@ public class AuthController {
 
     @Autowired
     private AuthenticationManager authenticationManager;
+    @Autowired
+    private UserService userService;
+
 
     /**
      * Endpoint for user login.
@@ -96,7 +100,7 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<?> createUser(@Valid @RequestBody RegisterUserDTO registerUserDto) {
         try {
-            UserEntity user = new UserEntity(0L,registerUserDto.getUserName(), registerUserDto.getEmail(), registerUserDto.getPassword() , authService.setRole(registerUserDto.getRoles()),true);
+            UserEntity user = new UserEntity(0L,registerUserDto.getUserName(), registerUserDto.getEmail(), registerUserDto.getPassword() , null,null,authService.setRole(registerUserDto.getRoles()),true);
             authService.save(registerUserDto);
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
@@ -145,5 +149,24 @@ public class AuthController {
         });
         return errors;
     }
-
+    @GetMapping("/email/{email}")
+    public ResponseEntity<?> resetRequest(@PathVariable String email){
+        try{
+            authService.resetRequest(email);
+            return new ResponseEntity<>("Email sent!", HttpStatus.OK);
+        }catch(Exception e){
+            return new ResponseEntity<>("Email not found", HttpStatus.BAD_REQUEST);
+        }
+    }
+    @PutMapping("/newpassword")
+    public ResponseEntity<?> resetPassword(@RequestBody Map<String, String> payload){
+        try {
+            String password = payload.get("newPassword");
+            String token = payload.get("token");
+            authService.resetPassword(token, password);
+            return new ResponseEntity<>("Password updated!", HttpStatus.OK);
+        }catch(Exception e){
+            return new ResponseEntity<>("expired token", HttpStatus.BAD_REQUEST);
+        }
+    }
 }
