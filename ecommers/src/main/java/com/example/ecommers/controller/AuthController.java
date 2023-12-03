@@ -1,9 +1,6 @@
 package com.example.ecommers.controller;
 
-import com.example.ecommers.dto.LoginResponseDTO;
-import com.example.ecommers.dto.LoginResponseUserDTO;
-import com.example.ecommers.dto.LoginUserDTO;
-import com.example.ecommers.dto.RegisterUserDTO;
+import com.example.ecommers.dto.*;
 import com.example.ecommers.model.UserEntity;
 import com.example.ecommers.security.JwtUtil;
 import com.example.ecommers.service.AuthServiceImpl;
@@ -159,11 +156,9 @@ public class AuthController {
         }
     }
     @PutMapping("/newpassword")
-    public ResponseEntity<?> resetPassword(@RequestBody Map<String, String> payload){
+    public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordUserDTO resetPasswordUserDTO){
         try {
-            String password = payload.get("newPassword");
-            String token = payload.get("token");
-            authService.resetPassword(token, password);
+            authService.resetPassword(resetPasswordUserDTO);
             return new ResponseEntity<>("Password updated!", HttpStatus.OK);
         }catch(Exception e){
             return new ResponseEntity<>("expired token", HttpStatus.BAD_REQUEST);

@@ -1,6 +1,7 @@
 package com.example.ecommers.service;
 
 import com.example.ecommers.dto.RegisterUserDTO;
+import com.example.ecommers.dto.ResetPasswordUserDTO;
 import com.example.ecommers.model.RoleEntity;
 import com.example.ecommers.model.UserEntity;
 import com.example.ecommers.repository.I_UserRepository;
@@ -107,16 +108,17 @@ public class AuthServiceImpl implements I_AuthService {
             user.setResetToken(UUID.randomUUID().toString());
             user.setExpirationDate(LocalDateTime.now().plusHours(2));
             userRepository.save(user);
-            emailService.sendEmail(email, "Password Recovery", "Hello, this is your reset request email. To reset your password, visit localhost:5173/password/new/"+user.getResetToken());
+            String resetLink = "http://localhost:5173/password/new/" + user.getResetToken();
+            emailService.sendEmail(email, "Password Recovery", "Hello, this is your reset request email. To reset your password, visit  <a href='"+resetLink+"'>"+resetLink+"</a>");
         }else{
             System.out.println("error user not found");
         }
     }
-    public void resetPassword(String token, String password){
-        Optional<UserEntity> optUser = userRepository.findByToken(token);
+    public void resetPassword(ResetPasswordUserDTO resetPasswordUserDTO){
+        Optional<UserEntity> optUser = userRepository.findByToken(resetPasswordUserDTO.getResetToken());
         if(optUser.isPresent()){
             UserEntity user = optUser.get();
-            user.setPassword(passwordEncoder.encode(password));
+            user.setPassword(passwordEncoder.encode(resetPasswordUserDTO.getPassword()));
             userRepository.save(user);
         }else{
             System.out.println("error");
