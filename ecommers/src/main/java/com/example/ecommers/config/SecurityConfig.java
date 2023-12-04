@@ -76,7 +76,7 @@ public class SecurityConfig {
                             .requestMatchers("/api/v1/product/new").hasRole("Admin")
                             .requestMatchers("/api/v1/product/update").hasRole("Admin")
                             .requestMatchers("/api/v1/product/delete/{id}").hasRole("Admin")
-                            .requestMatchers("/api/v1/product/logout").authenticated()
+                            .requestMatchers("/api/v1/product/logout").permitAll()
                             .anyRequest().permitAll();
                 })
                 .sessionManagement(session -> {
