@@ -2,6 +2,8 @@ package com.example.ecommers.service;
 
 import com.example.ecommers.dto.RegisterUserDTO;
 import com.example.ecommers.dto.ResetPasswordUserDTO;
+import com.example.ecommers.exception.CustomHandler;
+import com.example.ecommers.exception.UserAlrdyExist;
 import com.example.ecommers.model.RoleEntity;
 import com.example.ecommers.model.UserEntity;
 import com.example.ecommers.repository.I_UserRepository;
@@ -10,9 +12,13 @@ import com.example.ecommers.serviceInterface.I_RoleService;
 import com.example.ecommers.serviceInterface.I_UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 
 import java.time.LocalDateTime;
@@ -71,13 +77,13 @@ public class AuthServiceImpl implements I_AuthService {
         userEntity.setStatus(true);
 
         if (userRepository.findByEmail(userEntity.getEmail()).isPresent()) {
-            throw new RuntimeException("Este Usuario ya existe");
+            throw new UserAlrdyExist("This user already exist");
         } else {
             try {
                 System.out.println(userEntity.toString());
                 userRepository.save(userEntity);
-            } catch (Exception e) {
-                throw new RuntimeException("Error saving user on the database");
+            } catch (RuntimeException e) {
+                throw new CustomHandler("Error saving user on the database");
             }
         }
         return user;
@@ -153,5 +159,25 @@ public class AuthServiceImpl implements I_AuthService {
      */
     private long generateRandomId() {
         return random.nextLong();
+    }
+
+    /**
+     *
+     * Class to handle @Valid exception and personalize error message
+     *
+     * @param ex type: MethodArgumentNotValidException, exception thrown by @Valid
+     * @return Personalized error message
+     */
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getAllErrors().forEach((error) -> {
+            String fieldName = "Bad Request";
+            String errorMessage = error.getDefaultMessage();
+            errors.put(fieldName, errorMessage);
+        });
+        return errors;
     }
 }
