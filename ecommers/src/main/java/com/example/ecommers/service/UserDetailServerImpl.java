@@ -1,4 +1,5 @@
 package com.example.ecommers.service;
+import com.example.ecommers.exception.CustomHandler;
 import com.example.ecommers.model.UserEntity;
 import com.example.ecommers.repository.I_UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +37,7 @@ public class UserDetailServerImpl implements UserDetailsService {
             userEntity = userRepository.findByEmail(email).orElseThrow(() ->
                     new UsernameNotFoundException("Usuario no encontrado: " + email));
         } catch (UsernameNotFoundException e) {
-            throw new RuntimeException("Error accessing user database");
+            throw new CustomHandler("Error accessing user database");
         }
 
         Collection<? extends GrantedAuthority> authorities = userEntity.getRoles().stream()
