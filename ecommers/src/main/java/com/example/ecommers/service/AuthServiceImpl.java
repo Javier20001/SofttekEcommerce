@@ -77,10 +77,11 @@ public class AuthServiceImpl implements I_AuthService {
         userEntity.setStatus(true);
 
         if (userRepository.findByEmail(userEntity.getEmail()).isPresent()) {
-            throw new UserAlrdyExist("This user already exist");
-        } else {
+            throw new UserAlrdyExist("This user email already exist");
+        } else if(userRepository.findByUserName(userEntity.getUserName()).isPresent()){
+            throw new UserAlrdyExist("This user name already exist");
+        }else{
             try {
-                System.out.println(userEntity.toString());
                 userRepository.save(userEntity);
             } catch (RuntimeException e) {
                 throw new CustomHandler("Error saving user on the database");

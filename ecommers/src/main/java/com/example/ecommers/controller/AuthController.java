@@ -121,9 +121,8 @@ public class AuthController {
             );
             return ResponseEntity.ok().body(loginResponseDTO);
         } catch (RuntimeException re) {
-            re.printStackTrace();
             return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body(Collections.singletonMap("error", "This user already exists"));
+                    .body(Collections.singletonMap("error", re.getMessage()));
         }
     }
 
