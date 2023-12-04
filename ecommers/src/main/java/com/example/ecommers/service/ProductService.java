@@ -43,7 +43,17 @@ public class ProductService implements I_ProductService {
      * @see com.example.ecommers.repository.I_ProductRepository#findAll()
      */
     public List<ProductEntity> getAllProducts() {
-        return productRepository.findAll();
+        try {
+            return productRepository.findAll();
+        } catch (Exception e) {
+            // Handle the exception appropriately, you can log it or throw a custom exception
+            // For demonstration purposes, let's print the stack trace
+            e.printStackTrace();
+
+            // You might want to throw a custom exception or return a specific error response
+            // based on your application's requirements
+            throw new RuntimeException("Failed to retrieve all products. Reason: " + e.getMessage());
+        }
     }
 
     /**
@@ -55,9 +65,18 @@ public class ProductService implements I_ProductService {
      * @see com.example.ecommers.repository.I_ProductRepository#findById(Object)
      */
     public Optional<ProductEntity> getProductById(Long id) {
-        return productRepository.findById(id);
-    }
+        try {
+            return productRepository.findById(id);
+        } catch (Exception e) {
+            // Handle the exception appropriately, you can log it or throw a custom exception
+            // For demonstration purposes, let's print the stack trace
+            e.printStackTrace();
 
+            // You might want to throw a custom exception or return a specific error response
+            // based on your application's requirements
+            throw new RuntimeException("Failed to retrieve the product by ID. Reason: " + e.getMessage());
+        }
+    }
     /**
      * Saves a new product.
      *
@@ -67,11 +86,26 @@ public class ProductService implements I_ProductService {
      * @see com.example.ecommers.repository.I_ProductRepository#save(Object)
      */
     public ProductEntity saveProduct(ProductEntity product) {
-        ProductEntity productEntity = saveCategory(product);
-        product.setStatus(true);
-        // Save the product after handling the category
-        return productRepository.save(productEntity);
+        try {
+            // Save the category first
+            ProductEntity productEntity = saveCategory(product);
+
+            // Update the product status
+            product.setStatus(true);
+
+            // Save the product after handling the category
+            return productRepository.save(productEntity);
+        } catch (Exception e) {
+            // Handle the exception appropriately, you can log it or throw a custom exception
+            // For demonstration purposes, let's print the stack trace
+            e.printStackTrace();
+
+            // You might want to throw a custom exception or return a specific error response
+            // based on your application's requirements
+            throw new RuntimeException("Failed to save the product. Reason: " + e.getMessage());
+        }
     }
+
 
     /**
      * Updates an existing product.
@@ -85,16 +119,25 @@ public class ProductService implements I_ProductService {
      * @see com.example.ecommers.repository.I_ProductRepository#save(Object)
      */
     public ProductEntity updateProduct(Long id, ProductEntity newProduct) {
-        return productRepository.findById(id)
-                .map(existingProduct -> {
-                    existingProduct.setProductName(newProduct.getProductName());
-                    existingProduct.setProductStock(newProduct.getProductStock());
-                    existingProduct.setProductImg(newProduct.getProductImg());
-                    existingProduct.setProductPrice(newProduct.getProductPrice());
-                    existingProduct = saveCategory(newProduct);
-                    return productRepository.save(existingProduct);
-                })
-                .orElseThrow(() -> new RuntimeException("Id product " + id + " not found"));
+        try {
+            Optional<ProductEntity> optionalExistingProduct = productRepository.findById(id);
+            return optionalExistingProduct.map(existingProduct -> {
+                existingProduct.setProductName(newProduct.getProductName());
+                existingProduct.setProductStock(newProduct.getProductStock());
+                existingProduct.setProductImg(newProduct.getProductImg());
+                existingProduct.setProductPrice(newProduct.getProductPrice());
+                existingProduct = saveCategory(newProduct);
+                return productRepository.save(existingProduct);
+            }).orElseThrow(() -> new RuntimeException("Product with ID " + id + " not found"));
+        } catch (Exception e) {
+            // Handle the exception appropriately, you can log it or throw a custom exception
+            // For demonstration purposes, let's print the stack trace
+            e.printStackTrace();
+
+            // You might want to throw a custom exception or return a specific error response
+            // based on your application's requirements
+            throw new RuntimeException("Failed to update product. Reason: " + e.getMessage());
+        }
     }
 
     /**
@@ -106,14 +149,23 @@ public class ProductService implements I_ProductService {
      * @see com.example.ecommers.repository.I_ProductRepository#save(Object)
      */
     public void deleteProduct(Long id) {
-        productRepository.findById(id)
-                .map(existingProduct -> {
-                    existingProduct.setStatus(false);
-                    return productRepository.save(existingProduct);
-                })
-                .orElseThrow(() -> new RuntimeException("Id product \" + id + \" not found"));
-    }
+        try {
+            productRepository.findById(id)
+                    .map(existingProduct -> {
+                        existingProduct.setStatus(false);
+                        return productRepository.save(existingProduct);
+                    })
+                    .orElseThrow(() -> new RuntimeException("Product with ID " + id + " not found"));
+        } catch (Exception e) {
+            // Handle the exception appropriately, you can log it or throw a custom exception
+            // For demonstration purposes, let's print the stack trace
+            e.printStackTrace();
 
+            // You might want to throw a custom exception or return a specific error response
+            // based on your application's requirements
+            throw new RuntimeException("Failed to delete product. Reason: " + e.getMessage());
+        }
+    }
     /**
      * Helper method to handle the category associated with a product.
      *
@@ -124,37 +176,72 @@ public class ProductService implements I_ProductService {
      * @see com.example.ecommers.serviceInterface.I_CategoryService#saveCategory(CategoryEntity)
      */
     private ProductEntity saveCategory(ProductEntity product) {
-        CategoryEntity categoryEntity = product.getTypeCategory();
-        Optional<CategoryEntity> existingCategory = categoryService.getCategoryById(categoryEntity.getIdCategory());
+        try {
+            CategoryEntity categoryEntity = product.getTypeCategory();
+            Optional<CategoryEntity> existingCategory = categoryService.getCategoryById(categoryEntity.getIdCategory());
 
-        if (existingCategory.isPresent()) {
-            // The category exists, assign it to the product
-            product.setTypeCategory(existingCategory.get());
-        } else {
-            // The category does not exist, handle it accordingly
-            categoryEntity.setStatus(true);
-            categoryService.saveCategory(categoryEntity);
+            if (existingCategory.isPresent()) {
+                // The category exists, assign it to the product
+                product.setTypeCategory(existingCategory.get());
+            } else {
+                // The category does not exist, handle it accordingly
+                categoryEntity.setStatus(true);
+                categoryService.saveCategory(categoryEntity);
+            }
+
+            return product;
+        } catch (Exception e) {
+            // Handle the exception appropriately, you can log it or throw a custom exception
+            // For demonstration purposes, let's print the stack trace
+            e.printStackTrace();
+
+            // You might want to throw a custom exception or return a specific error response
+            // based on your application's requirements
+            throw new RuntimeException("Failed to handle category for product. Reason: " + e.getMessage());
         }
-        return product;
     }
 
 
     // Method to search products by name with partial match
     public List<ProductEntity> findByProductNameContainingIgnoreCase(String name) {
+        try {
+            if (name != null) {
+                // Modify the name (e.g., take the first three characters)
+                name = name.substring(0, Math.min(name.length(), 3));
 
-        if (name != null) {
+                // Perform the repository query
+                return productRepository.findByProductNameContainingIgnoreCase(name);
+            } else {
+                // You might want to throw an IllegalArgumentException or handle it differently
+                throw new IllegalArgumentException("Name cannot be null");
+            }
+        } catch (Exception e) {
+            // Handle the exception appropriately, you can log it or throw a custom exception
+            // For demonstration purposes, let's print the stack trace
+            e.printStackTrace();
 
-            name = name.substring(0,3);
-            return productRepository.findByProductNameContainingIgnoreCase(name);
-        } else {
-            return null;
+            // You might want to throw a custom exception or return a specific error response
+            // based on your application's requirements
+            throw new RuntimeException("Failed to perform product search. Reason: " + e.getMessage());
         }
     }
 
 
+
     public List<ProductEntity> findByStatusTrue() {
-        return productRepository.findByStatusTrue();
+        try {
+            return productRepository.findByStatusTrue();
+        } catch (Exception e) {
+            // Handle the exception appropriately, you can log it or throw a custom exception
+            // For demonstration purposes, let's print the stack trace
+            e.printStackTrace();
+
+            // You might want to throw a custom exception or return a specific error response
+            // based on your application's requirements
+            throw new RuntimeException("Failed to retrieve products with status true. Reason: " + e.getMessage());
+        }
     }
+
 
 
 
