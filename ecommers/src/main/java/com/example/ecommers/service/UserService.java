@@ -1,13 +1,16 @@
 package com.example.ecommers.service;
 
 
+import com.example.ecommers.dto.DashboardUserDTO;
 import com.example.ecommers.model.UserEntity;
 import com.example.ecommers.repository.I_UserRepository;
 import com.example.ecommers.serviceInterface.I_UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService implements I_UserService {
@@ -23,28 +26,50 @@ public class UserService implements I_UserService {
     //Guarda un usuario
     //Update de usuario existente
     public UserEntity updateUser(Long id, UserEntity newUser) {
-        return userRepository.findById(id)
-                .map(existingUser -> {
-                    existingUser.setUserName(newUser.getUserName());
-                    existingUser.setEmail(newUser.getEmail());
-                    existingUser.setPassword(newUser.getPassword());
-                    existingUser.setRoles(newUser.getRoles());
-                    existingUser.setStatus(newUser.getStatus());
-                    return userRepository.save(existingUser);
-                })
-                .orElseThrow(() -> new RuntimeException("Id User " + id + " not found"));
+        try {
+            return userRepository.findById(id)
+                    .map(existingUser -> {
+                        existingUser.setUserName(newUser.getUserName());
+                        existingUser.setEmail(newUser.getEmail());
+                        existingUser.setPassword(newUser.getPassword());
+                        existingUser.setRoles(newUser.getRoles());
+                        existingUser.setStatus(newUser.getStatus());
+                        return userRepository.save(existingUser);
+                    })
+                    .orElseThrow(() -> new RuntimeException("Id User " + id + " not found"));
+        }catch (Exception e){
+            throw new RuntimeException("Error updating user with id " + id);
+        }
     }
 
     //Borra un usuario
     public void deleteUser(Long id) {
-        userRepository.findById(id)
-                .map(existingUser -> {
-                    existingUser.setStatus(false);
-                    return userRepository.save(existingUser);
-                })
-                .orElseThrow(() -> new RuntimeException("Id user \" + id + \" not found"));
+        try {
+            userRepository.findById(id)
+                    .map(existingUser -> {
+                        existingUser.setStatus(false);
+                        return userRepository.save(existingUser);
+                    })
+                    .orElseThrow(() -> new RuntimeException("Id user \" + id + \" not found"));
+        }catch (Exception e){
+            throw new RuntimeException("Error deleting user with id " + id);
+        }
     }
-
+    public List<DashboardUserDTO> listUsers(){
+        try{
+            return userRepository.findAll().stream()
+                    .map(userEntity -> new DashboardUserDTO(
+                            userEntity.getId(),
+                            userEntity.getUserName(),
+                            userEntity.getEmail(),
+                            userEntity.getRoles(),
+                            userEntity.getStatus()
+                    ))
+                    .collect(Collectors.toList());
+        }catch(Exception e){
+            throw new RuntimeException("Error retrieving the Users");
+        }
+    }
 
 
 

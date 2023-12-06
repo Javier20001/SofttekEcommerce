@@ -13,26 +13,36 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/admin/user")
 @CrossOrigin(origins = "http://localhost:5173")
 public class UserController {
-
-    private final I_UserService userService;
-
     @Autowired
-    public UserController(UserService userService) {
-        this.userService = userService;
+    UserService userService;
+
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody UserEntity newUser) {
+        try {
+            UserEntity updatedUser = userService.updateUser(id, newUser);
+            return new ResponseEntity<>(updatedUser, HttpStatus.OK);
+        }catch(Exception e){
+            return new ResponseEntity<>("Email not found", HttpStatus.BAD_REQUEST);
+        }
     }
 
-    //Update de usuario existente
-    @PutMapping("update/{id}")
-    public ResponseEntity<UserEntity> updateUser(@PathVariable Long id, @RequestBody UserEntity newUser) {
-        UserEntity updatedUser = userService.updateUser(id, newUser);
-        return new ResponseEntity<>(updatedUser, HttpStatus.OK);
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable Long id) {
+        try {
+            userService.deleteUser(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }catch(Exception e){
+            return new ResponseEntity<>("User not found", HttpStatus.BAD_REQUEST);
+        }
     }
-
-    //Delete de usuario
-    @DeleteMapping("delete/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
-        userService.deleteUser(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    @GetMapping("/list")
+    public ResponseEntity<?> listUsers(){
+        try{
+            return new ResponseEntity<>(userService.listUsers(), HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>("Users not found", HttpStatus.BAD_REQUEST);
+        }
     }
 }
 
