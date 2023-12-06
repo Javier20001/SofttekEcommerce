@@ -41,13 +41,14 @@ class ProductServiceTest {
                 1L,
                 "Pendrive",
                 10,
-                "img.jpg",
+                "img.jpg","Alto pendrive",
                 new BigDecimal(1000),
                 Boolean.TRUE,
                 new CategoryEntity(
                         1L,
                         "Pendrives",
                         Boolean.TRUE
+
                 )
         );
     }
