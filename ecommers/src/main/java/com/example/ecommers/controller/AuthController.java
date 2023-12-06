@@ -78,8 +78,7 @@ public class AuthController {
             authService.save(registerUserDto);
             return ResponseEntity.ok().body(authService.generateToken(registerUserDto.getEmail(), registerUserDto.getPassword(),user));
         } catch (RuntimeException re) {
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body(Collections.singletonMap("error", re.getMessage()));
+            return new ResponseEntity<>(re.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
