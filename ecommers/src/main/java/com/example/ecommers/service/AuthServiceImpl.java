@@ -1,5 +1,7 @@
 package com.example.ecommers.service;
 
+import com.example.ecommers.dto.LoginResponseDTO;
+import com.example.ecommers.dto.LoginResponseUserDTO;
 import com.example.ecommers.dto.RegisterUserDTO;
 import com.example.ecommers.dto.ResetPasswordUserDTO;
 import com.example.ecommers.exception.CustomHandler;
@@ -7,12 +9,17 @@ import com.example.ecommers.exception.UserAlrdyExist;
 import com.example.ecommers.model.RoleEntity;
 import com.example.ecommers.model.UserEntity;
 import com.example.ecommers.repository.I_UserRepository;
+import com.example.ecommers.security.JwtUtil;
 import com.example.ecommers.serviceInterface.I_AuthService;
 import com.example.ecommers.serviceInterface.I_RoleService;
 import com.example.ecommers.serviceInterface.I_UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -57,7 +64,14 @@ public class AuthServiceImpl implements I_AuthService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @Autowired EmailService emailService;
+    @Autowired
+    EmailService emailService;
+
+    @Autowired
+    private JwtUtil jwtUtil;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
     /**
      * Saves a new user based on the provided RegisterUserDTO.
@@ -162,23 +176,29 @@ public class AuthServiceImpl implements I_AuthService {
         return random.nextLong();
     }
 
-    /**
-     *
-     * Class to handle @Valid exception and personalize error message
-     *
-     * @param ex type: MethodArgumentNotValidException, exception thrown by @Valid
-     * @return Personalized error message
-     */
+    public LoginResponseDTO generateToken(String email, String password, UserEntity user){
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new HashMap<>();
-        ex.getBindingResult().getAllErrors().forEach((error) -> {
-            String fieldName = "Bad Request";
-            String errorMessage = error.getDefaultMessage();
-            errors.put(fieldName, errorMessage);
-        });
-        return errors;
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        email,
+                        password
+                )
+        );
+        // Set the authentication in the security context
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        // Generate JWT token
+        String token = jwtUtil.generateAccesToken(email);
+
+        LoginResponseUserDTO loginResponseUserDTO = new LoginResponseUserDTO(
+                user.getUserName(),
+                user.getRoles().stream().map(role -> String.valueOf(role.getName())).toList()
+        );
+        LoginResponseDTO loginResponseDTO = new LoginResponseDTO(
+                token,
+                loginResponseUserDTO
+        );
+
+        return loginResponseDTO;
     }
 }
