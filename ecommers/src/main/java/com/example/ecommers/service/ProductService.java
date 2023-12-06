@@ -126,6 +126,7 @@ public class ProductService implements I_ProductService {
                 existingProduct.setProductStock(newProduct.getProductStock());
                 existingProduct.setProductImg(newProduct.getProductImg());
                 existingProduct.setProductPrice(newProduct.getProductPrice());
+                existingProduct.setDescription(newProduct.getDescription());
                 existingProduct = saveCategory(newProduct);
                 return productRepository.save(existingProduct);
             }).orElseThrow(() -> new RuntimeException("Product with ID " + id + " not found"));
