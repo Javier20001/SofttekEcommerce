@@ -1,6 +1,7 @@
 package com.example.ecommers.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -55,6 +56,11 @@ public class ProductEntity {
      */
     @Column(length = 200)
     private String productImg;
+
+    @Lob
+    @Column(length = 500, unique = true, nullable = false)
+    @NotBlank(message = "Description is required")
+    private String description;
 
     /**
      * The price of the product.
