@@ -1,5 +1,6 @@
 package com.example.ecommers.service;
 
+import com.example.ecommers.exception.ProductAlrdyExist;
 import com.example.ecommers.model.CategoryEntity;
 import com.example.ecommers.model.ProductEntity;
 import com.example.ecommers.repository.I_ProductRepository;
@@ -92,9 +93,15 @@ public class ProductService implements I_ProductService {
 
             // Update the product status
             product.setStatus(true);
-
-            // Save the product after handling the category
-            return productRepository.save(productEntity);
+            if(productRepository.findByProductNameIgnoreCaseAndStatus(product.getProductName(),productEntity.getStatus()).isPresent()){
+                throw new ProductAlrdyExist("Este producto ya existe.");
+            }else {
+                // Save the product after handling the category
+                return productRepository.save(productEntity);
+            }
+        } catch (ProductAlrdyExist ex) {
+            // Catch and rethrow the specific exception for GlobalExceptionHandler
+            throw ex;
         } catch (Exception e) {
             // Handle the exception appropriately, you can log it or throw a custom exception
             // For demonstration purposes, let's print the stack trace
