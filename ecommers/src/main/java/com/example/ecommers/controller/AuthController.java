@@ -1,5 +1,6 @@
 package com.example.ecommers.controller;
 
+import com.example.ecommers.config.SecurityConfig;
 import com.example.ecommers.dto.*;
 import com.example.ecommers.model.UserEntity;
 import com.example.ecommers.security.JwtUtil;
@@ -7,6 +8,7 @@ import com.example.ecommers.service.AuthServiceImpl;
 import com.example.ecommers.service.UserService;
 import com.example.ecommers.serviceInterface.I_AuthService;
 import com.example.ecommers.serviceInterface.I_UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -42,9 +44,7 @@ public class AuthController {
     private JwtUtil jwtUtil;
 
     @Autowired
-    private AuthenticationManager authenticationManager;
-    @Autowired
-    private UserService userService;
+    private SecurityConfig securityConfig;
 
 
     /**
@@ -56,32 +56,9 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginUserDTO loginUserDto) {
         try {
-            // Authenticate the user using provided credentials
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            loginUserDto.getEmail(),
-                            loginUserDto.getPassword()
-                    )
-            );
-
-            // Set the authentication in the security context
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-
-            // Generate JWT token
-            String token = jwtUtil.generateAccesToken(loginUserDto.getEmail());
-
-            // Return JWT token and user details in the response
             UserEntity currentUser = authService.findByEmail(loginUserDto.getEmail()).get();
-            LoginResponseUserDTO loginResponseUserDTO = new LoginResponseUserDTO(
-                    currentUser.getUserName(),
-                    currentUser.getRoles().stream().map(role -> String.valueOf(role.getName())).toList()
-            );
-            LoginResponseDTO loginResponseDTO = new LoginResponseDTO(
-                    token,
-                    loginResponseUserDTO
-            );
             return ResponseEntity.ok()
-                    .body(loginResponseDTO);
+                    .body(authService.generateToken(loginUserDto.getEmail(),loginUserDto.getPassword(),currentUser));
         } catch (BadCredentialsException e) {
             // Return an error response if authentication fails
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
@@ -99,52 +76,13 @@ public class AuthController {
         try {
             UserEntity user = new UserEntity(0L,registerUserDto.getUserName(), registerUserDto.getEmail(), registerUserDto.getPassword() , null,null,authService.setRole(registerUserDto.getRoles()),true);
             authService.save(registerUserDto);
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            registerUserDto.getEmail(),
-                            registerUserDto.getPassword()
-                    )
-            );
-            // Set the authentication in the security context
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-
-            // Generate JWT token
-            String token = jwtUtil.generateAccesToken(registerUserDto.getEmail());
-
-            LoginResponseUserDTO loginResponseUserDTO = new LoginResponseUserDTO(
-                    user.getUserName(),
-                    user.getRoles().stream().map(role -> String.valueOf(role.getName())).toList()
-            );
-            LoginResponseDTO loginResponseDTO = new LoginResponseDTO(
-                    token,
-                    loginResponseUserDTO
-            );
-            return ResponseEntity.ok().body(loginResponseDTO);
+            return ResponseEntity.ok().body(authService.generateToken(registerUserDto.getEmail(), registerUserDto.getPassword(),user));
         } catch (RuntimeException re) {
             return ResponseEntity.status(HttpStatus.CONFLICT)
                     .body(Collections.singletonMap("error", re.getMessage()));
         }
     }
 
-    /**
-     *
-     * Class to handle @Valid exception and personalize error message
-     *
-     * @param ex type: MethodArgumentNotValidException, exception thrown by @Valid
-     * @return Personalized error message
-     */
-
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new HashMap<>();
-        ex.getBindingResult().getAllErrors().forEach((error) -> {
-            String fieldName = "Bad Request";
-            String errorMessage = error.getDefaultMessage();
-            errors.put(fieldName, errorMessage);
-        });
-        return errors;
-    }
     @GetMapping("/email/{email}")
     public ResponseEntity<?> resetRequest(@PathVariable String email){
         try{
@@ -154,6 +92,7 @@ public class AuthController {
             return new ResponseEntity<>("Email not found", HttpStatus.BAD_REQUEST);
         }
     }
+
     @PutMapping("/newpassword")
     public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordUserDTO resetPasswordUserDTO){
         try {
@@ -162,5 +101,17 @@ public class AuthController {
         }catch(Exception e){
             return new ResponseEntity<>("expired token", HttpStatus.BAD_REQUEST);
         }
+    }
+
+    /**
+     * Endpoint for user logout, invalidating the current token.
+     *
+     * @param request The HttpServletRequest for the current user session.
+     * @return ResponseEntity indicating successful logout.
+     */
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(HttpServletRequest request) {
+        securityConfig.invalidateToken();
+        return ResponseEntity.ok("Logout successful");
     }
 }

@@ -40,9 +40,6 @@ public class ProductController {
     @Autowired
     private I_ProductService service;
 
-    @Autowired
-    private SecurityConfig securityConfig;
-
     /**
      * Retrieves a list of all products.
      *
@@ -120,15 +117,4 @@ public class ProductController {
         return json;
     }
 
-    /**
-     * Endpoint for user logout, invalidating the current token.
-     *
-     * @param request The HttpServletRequest for the current user session.
-     * @return ResponseEntity indicating successful logout.
-     */
-    @PostMapping("/logout")
-    public ResponseEntity<String> logout(HttpServletRequest request) {
-        securityConfig.invalidateToken();
-        return ResponseEntity.ok("Logout successful");
-    }
 }
