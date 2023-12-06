@@ -1,6 +1,7 @@
 package com.example.ecommers.controller;
 
 import com.example.ecommers.config.SecurityConfig;
+import com.example.ecommers.exception.ProductAlrdyExist;
 import com.example.ecommers.model.CategoryEntity;
 import com.example.ecommers.model.ProductEntity;
 import com.example.ecommers.service.AuthServiceImpl;
@@ -63,15 +64,20 @@ public class ProductController {
      * @PostMapping("/new") Mapping for the endpoint to add a new product.
      */
     @PostMapping("/new")
-    public ResponseEntity<?> add(@RequestBody ProductEntity product){
-        try{
+    public ResponseEntity<?> add(@RequestBody ProductEntity product) {
+        try {
             service.saveProduct(product);
+            return new ResponseEntity<>("Se guardo correctamente", HttpStatus.CREATED);
+        } catch (ProductAlrdyExist e) {
+            // Handle the specific exception thrown by the service
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (RuntimeException e) {
-            e.printStackTrace(); // Adds this line to print the exception trace.
-            throw e; // Throws the original exception to maintain previous behavior.
+            e.printStackTrace();
+            // Handle other runtime exceptions, you might want to log them or return a generic error response
+            return new ResponseEntity<>("Error al guardar el producto", HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<>("Se guardo correctamente", HttpStatus.CREATED);
     }
+
 
     /**
      * Updates an existing product.

@@ -58,7 +58,6 @@ public interface I_ProductService {
 
 
      List<ProductEntity> findByProductNameContainingIgnoreCase(String name);
-
-         List<ProductEntity> findByStatusTrue();
+     List<ProductEntity> findByStatusTrue();
 }
 
