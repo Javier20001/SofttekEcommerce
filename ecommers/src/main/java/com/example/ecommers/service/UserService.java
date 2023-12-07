@@ -70,7 +70,22 @@ public class UserService implements I_UserService {
             throw new RuntimeException("Error retrieving the Users");
         }
     }
-
-
-
+    public DashboardUserDTO getUser(String username){
+        try{
+            Optional<UserEntity> optUser = userRepository.findByUserName(username);
+            if(optUser.isPresent()){
+                DashboardUserDTO dashboardUserDTO = new DashboardUserDTO();
+                dashboardUserDTO.setId(optUser.get().getId());
+                dashboardUserDTO.setUserName(optUser.get().getUserName());
+                dashboardUserDTO.setEmail(optUser.get().getEmail());
+                dashboardUserDTO.setRoles(optUser.get().getRoles());
+                dashboardUserDTO.setStatus(optUser.get().getStatus());
+                return dashboardUserDTO;
+            }else{
+                throw new RuntimeException("User not found");
+            }
+        }catch(Exception e){
+            throw new RuntimeException("Error retrieving the User", e);
+        }
+    }
 }

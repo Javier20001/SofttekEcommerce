@@ -67,9 +67,9 @@ public class CategoryService implements I_CategoryService {
      */
     @Override
     public CategoryEntity saveCategory(CategoryEntity category) {
-        if (categoryRepository.existsByName(category.getCategory())) {
+        if (categoryRepository.existsByCategory(category.getCategory())) {
             // Si ya existe, lanzar una excepción
-            throw new EntityExistsException("Ya existe una categoría con el nombre: " + category.getCategory());
+            throw new EntityExistsException("Already exist a category with the name: " + category.getCategory());
         }
 
         // Si no existe, guardar la categoría en la base de datos
