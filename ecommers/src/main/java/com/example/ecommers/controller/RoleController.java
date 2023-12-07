@@ -28,19 +28,17 @@ public class RoleController {
         List<RoleEntity> roles = service.getAllRoleEntity();
         Gson gson = new Gson();
         String json = gson.toJson(roles);
-        System.out.println(); // This line seems unnecessary; consider removing or adding a comment explaining its purpose.
         return json;
     }
     
     @PostMapping("/new")
-    public ResponseEntity <?>  add(@RequestBody RoleEntity role){
-         try{
-             service.saveRole(role);
-         }catch(RuntimeException e){
-             e.printStackTrace();
-             throw e;              
-         }
-         return new ResponseEntity<>("se guardo correctamente", HttpStatus.CREATED );
+    public ResponseEntity<?> add(@RequestBody RoleEntity role) {
+        try {
+            service.saveRole(role);
+            return new ResponseEntity<>("Se guardó correctamente", HttpStatus.CREATED);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>("Error al guardar el rol: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
     
     @PostMapping("/update")
