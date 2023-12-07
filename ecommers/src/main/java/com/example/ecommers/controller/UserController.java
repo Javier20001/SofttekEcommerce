@@ -49,7 +49,7 @@ public class UserController {
         try{
             return new ResponseEntity<>(userService.getUser(username), HttpStatus.OK);
         }catch(Exception e){
-            return new ResponseEntity<>("completar", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("User not found", HttpStatus.BAD_REQUEST);
         }
     }
 }
