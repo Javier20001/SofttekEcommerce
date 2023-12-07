@@ -1,12 +1,17 @@
 package com.example.ecommers.controller;
 
-
 import com.example.ecommers.dto.PaymentMPDTO;
 import com.example.ecommers.model.ItemEntity;
+import com.mercadopago.client.preference.PreferenceBackUrlsRequest;
+import com.mercadopago.client.preference.PreferenceClient;
 import com.mercadopago.client.preference.PreferenceItemRequest;
+import com.mercadopago.client.preference.PreferenceRequest;
+import com.mercadopago.exceptions.MPApiException;
+import com.mercadopago.exceptions.MPException;
+import com.mercadopago.resources.preference.Preference;
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.mercadopago.MercadoPagoConfig;
 
@@ -16,65 +21,47 @@ import java.util.List;
 @RestController
 @CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/api/v1/product/mercadoPago")
-@AllArgsConstructor
-@NoArgsConstructor
 public class MpController {
-    @GetMapping
-    public void mercadoPago(@Valid @RequestBody PaymentMPDTO paymentMPDTO){
-        MercadoPagoConfig.setAccessToken("TEST-5642789275818402-120519-ce2348b6a2e786844849c5e1f8aa2e42-498645273");
-        List<PreferenceItemRequest> items = new ArrayList<>();
-        for(ItemEntity item:paymentMPDTO.getLstItem()){
-            PreferenceItemRequest itemRequest = PreferenceItemRequest.builder()
-                    .id(item.getProduct().getIdProduct().toString())
-                    .title(item.getProduct().getProductName())
-                    .pictureUrl(item.getProduct().getProductImg())
-                    .description(item.getProduct().getDescription())
-                    .categoryId(item.getProduct().getTypeCategory().getIdCategory().toString())
-                    .quantity(1)
-                    .unitPrice(item.getProduct().getProductPrice())
+    @PostMapping("/compra")
+    public ResponseEntity<String> mercadoPago(@Valid @RequestBody PaymentMPDTO paymentMPDTO) throws MPException, MPApiException {
+        try {
+            MercadoPagoConfig.setAccessToken("TEST-5642789275818402-120519-ce2348b6a2e786844849c5e1f8aa2e42-498645273");
+            List<PreferenceItemRequest> items = new ArrayList<>();
+            for (ItemEntity item : paymentMPDTO.getLstItem()) {
+                PreferenceItemRequest itemRequest = PreferenceItemRequest.builder()
+                        .id(item.getProduct().getIdProduct().toString())
+                        .title(item.getProduct().getProductName())
+                        .pictureUrl(item.getProduct().getProductImg())
+                        .description(item.getProduct().getDescription())
+                        .categoryId(item.getProduct().getTypeCategory().getIdCategory().toString())
+                        .quantity(item.getQuantitySelected())
+                        .unitPrice(item.getProduct().getProductPrice())
+                        .build();
+
+                items.add(itemRequest);
+            }
+            PreferenceRequest preferenceRequest = PreferenceRequest.builder()
+                    .items(items)
+                    .build();
+            PreferenceClient client = new PreferenceClient();
+            Preference preference = client.create(preferenceRequest);
+            PreferenceBackUrlsRequest.builder()
+                    .success("localhost:5173")
+                    .pending("localhost:5173")
+                    .failure("localhost:5173")
                     .build();
 
-            items.add(itemRequest);
+            // Aquí podrías devolver el ID de la preferencia o cualquier otra información que necesites.
+            return ResponseEntity.ok("Preferencia creada con ID: " + preference.getId());
+        } catch (MPException | MPApiException e) {
+            // Manejo de excepciones
+            if (e instanceof MPApiException) {
+                MPApiException apiException = (MPApiException) e;
+                System.out.println("Error de la API de Mercado Pago:");
+                System.out.println("HTTP Status Code: " + apiException.getStatusCode());
+                System.out.println("Response: " + apiException.getMessage());
+            }
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al procesar la solicitud");
         }
-        /*
-        List<Excluded> excludedPaymentMethods = new ArrayList<>();
-        ExcludedPaymentMethod excludedPaymentMethod = new ExcludedPaymentMethod();
-        excludedPaymentMethod.setId("master");
-        excludedPaymentMethods.add(excludedPaymentMethod);
-
-        List<ExcludedPaymentType> excludedPaymentTypes = new ArrayList<>();
-        ExcludedPaymentType excludedPaymentType = new ExcludedPaymentType();
-        excludedPaymentType.setId("ticket");
-        excludedPaymentTypes.add(excludedPaymentType);
-
-        PaymentMethods paymentMethods = {
-                excluded_payment_methods: [],
-        excluded_payment_types: [
-        {
-            id: "ticket"
-        },
-        {
-            id: "credit_card"
-        }
-          ],
-        installments: 1
-}
-
-
-        PreferenceRequest preferenceRequest = PreferenceRequest.builder()
-                .items(items)
-                .payer(payer)
-                .backUrls(backUrls)
-                .autoReturn("approved")
-                .paymentMethods(paymentMethods)
-                .notificationUrl("https://www.your-site.com/ipn")
-                .statementDescriptor("MEUNEGOCIO")
-                .externalReference("Reference_1234")
-                .expires(true)
-                .expirationDateFrom("2016-02-01T12:00:00.000-04:00")
-                .expirationDateTo("2016-02-28T12:00:00.000-04:00")
-                .build();
-
-        */
     }
 }
