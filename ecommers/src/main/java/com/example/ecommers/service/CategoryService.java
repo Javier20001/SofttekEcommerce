@@ -6,6 +6,7 @@ import com.example.ecommers.serviceInterface.I_CategoryService;
 import java.util.List;
 import java.util.Optional;
 
+import jakarta.persistence.EntityExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -66,8 +67,15 @@ public class CategoryService implements I_CategoryService {
      */
     @Override
     public CategoryEntity saveCategory(CategoryEntity category) {
+        if (categoryRepository.existsByName(category.getCategory())) {
+            // Si ya existe, lanzar una excepción
+            throw new EntityExistsException("Ya existe una categoría con el nombre: " + category.getCategory());
+        }
+
+        // Si no existe, guardar la categoría en la base de datos
         return categoryRepository.save(category);
     }
+
 
     /**
      * Updates an existing product category.
