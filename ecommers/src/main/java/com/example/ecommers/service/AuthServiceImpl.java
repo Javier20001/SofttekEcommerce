@@ -26,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
 
 
 import java.time.LocalDateTime;
@@ -97,8 +98,8 @@ public class AuthServiceImpl implements I_AuthService {
         }else{
             try {
                 userRepository.save(userEntity);
-            } catch (RuntimeException e) {
-                throw new CustomHandler("Error saving user on the database");
+            } catch (CustomHandler e) {
+                throw new RuntimeException("Error saving user on the database" + e.getMessage());
             }
         }
         return user;

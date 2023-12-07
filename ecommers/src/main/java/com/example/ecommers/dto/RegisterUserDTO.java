@@ -1,6 +1,6 @@
 package com.example.ecommers.dto;
-import com.example.ecommers.model.RoleEntity;
-import jakarta.annotation.Nullable;
+
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -17,12 +17,19 @@ import java.util.List;
 @NoArgsConstructor
 public class RegisterUserDTO {
 
+    @NotBlank
+    @NotEmpty
     @NotNull(message = "Name must not be null")
     private String userName;
     @NotNull(message = "Password must not be null")
+    @NotBlank
+    @NotEmpty
     private String password;
+    @NotBlank
+    @NotEmpty
     @NotNull(message = "Email must not be null")
     private String email;
+    @NotEmpty
     @NotEmpty(message = "The user must have at least 1 role")
     private List<Long> roles;
 }
