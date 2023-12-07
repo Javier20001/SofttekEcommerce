@@ -44,6 +44,14 @@ public class UserController {
             return new ResponseEntity<>("Users not found", HttpStatus.BAD_REQUEST);
         }
     }
+    @GetMapping("/list/{username}")
+    public ResponseEntity<?> getUser(@PathVariable String username){
+        try{
+            return new ResponseEntity<>(userService.getUser(username), HttpStatus.OK);
+        }catch(Exception e){
+            return new ResponseEntity<>("User not found", HttpStatus.BAD_REQUEST);
+        }
+    }
 }
 
 
