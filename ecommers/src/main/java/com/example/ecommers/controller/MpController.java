@@ -23,6 +23,7 @@ import java.util.List;
 @RequestMapping("/api/v1/product/mercadoPago")
 public class MpController {
     @PostMapping("/compra")
+    @CrossOrigin(origins = "https://www.mercadopago.com/")
     public ResponseEntity<String> mercadoPago(@Valid @RequestBody PaymentMPDTO paymentMPDTO) throws MPException, MPApiException {
         try {
             MercadoPagoConfig.setAccessToken("TEST-5642789275818402-120519-ce2348b6a2e786844849c5e1f8aa2e42-498645273");
@@ -52,7 +53,7 @@ public class MpController {
                     .build();
 
             // Aquí podrías devolver el ID de la preferencia o cualquier otra información que necesites.
-            return ResponseEntity.ok("Preferencia creada con ID: " + preference.getId());
+            return ResponseEntity.ok(preference.getId());
         } catch (MPException | MPApiException e) {
             // Manejo de excepciones
             if (e instanceof MPApiException) {
