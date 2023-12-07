@@ -41,16 +41,18 @@ public class MpController {
 
                 items.add(itemRequest);
             }
+
             PreferenceRequest preferenceRequest = PreferenceRequest.builder()
                     .items(items)
+                    .backUrls(PreferenceBackUrlsRequest.builder()
+                            .success("localhost:5173")
+                            .pending("localhost:5173")
+                            .failure("localhost:5173")
+                            .build())
                     .build();
             PreferenceClient client = new PreferenceClient();
             Preference preference = client.create(preferenceRequest);
-            PreferenceBackUrlsRequest.builder()
-                    .success("localhost:5173")
-                    .pending("localhost:5173")
-                    .failure("localhost:5173")
-                    .build();
+
 
             // Aquí podrías devolver el ID de la preferencia o cualquier otra información que necesites.
             return ResponseEntity.ok(preference.getId());
