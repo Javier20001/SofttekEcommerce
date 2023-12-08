@@ -72,7 +72,7 @@ public class SecurityConfig {
                             .requestMatchers("/api/v1/product/new").hasRole("ADMIN")
                             .requestMatchers("/api/v1/product/update").hasRole("ADMIN")
                             .requestMatchers("/api/v1/product/delete/{id}").hasRole("ADMIN")
-                            .requestMatchers("/api/v1/product/mercadoPago/compra").authenticated()
+                            .requestMatchers("/api/v1/product/mercadoPago/**").authenticated()
                             .requestMatchers("/api/v1/category/list").permitAll()
                             .requestMatchers("/api/v1/category/new").hasRole("ADMIN")
                             .requestMatchers("/api/v1/category/update/{id}").hasRole("ADMIN")

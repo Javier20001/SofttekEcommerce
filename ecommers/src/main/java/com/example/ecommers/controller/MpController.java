@@ -1,5 +1,6 @@
 package com.example.ecommers.controller;
 
+import com.example.ecommers.dto.BidDTO;
 import com.example.ecommers.dto.PaymentMPDTO;
 import com.example.ecommers.model.ItemEntity;
 import com.mercadopago.client.preference.PreferenceBackUrlsRequest;
@@ -58,13 +59,23 @@ public class MpController {
             return ResponseEntity.ok(preference.getId());
         } catch (MPException | MPApiException e) {
             // Manejo de excepciones
-            if (e instanceof MPApiException) {
-                MPApiException apiException = (MPApiException) e;
+            if (e instanceof MPApiException apiException) {
                 System.out.println("Error de la API de Mercado Pago:");
                 System.out.println("HTTP Status Code: " + apiException.getStatusCode());
                 System.out.println("Response: " + apiException.getMessage());
             }
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al procesar la solicitud");
+        }
+    }
+
+    @PostMapping("/newBid")
+    public ResponseEntity<String> createBid(@Valid @RequestBody BidDTO bidDTO) {
+        try {
+            //bidService.save(bidDTO);
+            System.out.println(bidDTO);
+            return new  ResponseEntity<>("Bid Created!",HttpStatus.CREATED);
+        }catch (RuntimeException re){
+            return new ResponseEntity<>(re.getMessage(),HttpStatus.BAD_REQUEST);
         }
     }
 }
