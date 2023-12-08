@@ -15,18 +15,14 @@ public class ItemBidEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
     @Column
     private Long idProduct;
 
     @ManyToOne
     @JoinColumn(name = "bid_id")
     private BidEntity bid;
+
     @Column
     private Integer quantitySelected;
-
-
-
-
-
 }
+
