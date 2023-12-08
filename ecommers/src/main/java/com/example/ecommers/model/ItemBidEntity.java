@@ -22,10 +22,9 @@ public class ItemBidEntity {
     @ManyToOne
     @JoinColumn(name = "bid_id")
     private BidEntity bid;
+
     @Column
     private Integer quantitySelected;
-
-
 
 
 
