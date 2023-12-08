@@ -46,9 +46,9 @@ public class MpController {
             PreferenceRequest preferenceRequest = PreferenceRequest.builder()
                     .items(items)
                     .backUrls(PreferenceBackUrlsRequest.builder()
-                            .success("localhost:5173")
+                            .success("localhost:5173/Success")
                             .pending("localhost:5173")
-                            .failure("localhost:5173")
+                            .failure("localhost:5173/Failure")
                             .build())
                     .build();
             PreferenceClient client = new PreferenceClient();
