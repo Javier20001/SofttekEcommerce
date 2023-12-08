@@ -26,31 +26,19 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BidEntity {
-
-    /**
-     * The identifier for the bid.
-     *
-     * @Id Indicates that this field is the primary key.
-     * @GeneratedValue(strategy = GenerationType.IDENTITY) Specifies the strategy for generating the primary key value.
-     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    /**
-     * The category of the bid.
-     *
-     * @ManyToOne Indicates a Many-to-One relationship with the UserEntity.
-     * @JoinColumn(name = "id_user", nullable = false) Specifies the join column for the relationship.
-     */
     @ManyToOne
     @JoinColumn(name = "usuario_id")
     private UserEntity user;
 
-    @OneToMany(mappedBy = "bid" , cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "bid", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ItemBidEntity> items = new ArrayList<>();
 
-//    @OneToOne(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "dir_id", referencedColumnName = "id")
-//    private DirEntity dir;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "dir_id", referencedColumnName = "id")
+    private DirEntity dir;
 }
+
