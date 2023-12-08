@@ -50,7 +50,7 @@ public class UserEntity {
 
     // Roles asociados al usuario (relación Many-to-Many con Rol)
     @ManyToMany(fetch = FetchType.EAGER)
-    @NotNull
+    @NotBlank
     private List<RoleEntity> roles;
     
     @Column(columnDefinition = "boolean default true")
