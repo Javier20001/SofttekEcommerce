@@ -15,7 +15,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.mercadopago.MercadoPagoConfig;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,6 +49,7 @@ public class MpController {
                             .pending("localhost:5173")
                             .failure("localhost:5173/Failure")
                             .build())
+                    .autoReturn("approved")
                     .build();
             PreferenceClient client = new PreferenceClient();
             Preference preference = client.create(preferenceRequest);
@@ -72,7 +72,7 @@ public class MpController {
     public ResponseEntity<String> createBid(@Valid @RequestBody BidDTO bidDTO) {
         try {
             //bidService.save(bidDTO);
-            System.out.println(bidDTO);
+            System.out.println(bidDTO.toString());
             return new  ResponseEntity<>("Bid Created!",HttpStatus.CREATED);
         }catch (RuntimeException re){
             return new ResponseEntity<>(re.getMessage(),HttpStatus.BAD_REQUEST);
