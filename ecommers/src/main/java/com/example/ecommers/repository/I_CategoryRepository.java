@@ -12,4 +12,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface I_CategoryRepository extends JpaRepository<CategoryEntity, Long> {
+    boolean existsByCategory(String category);
 }

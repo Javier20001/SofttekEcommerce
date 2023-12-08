@@ -31,7 +31,7 @@ public class UserController {
     public ResponseEntity<?> deleteUser(@PathVariable Long id) {
         try {
             userService.deleteUser(id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.OK);
         }catch(Exception e){
             return new ResponseEntity<>("User not found", HttpStatus.BAD_REQUEST);
         }
@@ -42,6 +42,14 @@ public class UserController {
             return new ResponseEntity<>(userService.listUsers(), HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>("Users not found", HttpStatus.BAD_REQUEST);
+        }
+    }
+    @GetMapping("/list/{username}")
+    public ResponseEntity<?> getUser(@PathVariable String username){
+        try{
+            return new ResponseEntity<>(userService.getUser(username), HttpStatus.OK);
+        }catch(Exception e){
+            return new ResponseEntity<>("User not found", HttpStatus.BAD_REQUEST);
         }
     }
 }
