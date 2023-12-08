@@ -73,6 +73,7 @@ public class CategoryService implements I_CategoryService {
         }
 
         // Si no existe, guardar la categoría en la base de datos
+        category.setStatus(true);
         return categoryRepository.save(category);
     }
 
