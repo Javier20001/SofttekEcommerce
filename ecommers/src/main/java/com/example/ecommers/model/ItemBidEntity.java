@@ -19,9 +19,9 @@ public class ItemBidEntity {
     @Column
     private Long idProduct;
 
-    //@ManyToOne
-    //@JoinColumn(name = "bid_id")
-    //private Bid bid;
+    @ManyToOne
+    @JoinColumn(name = "bid_id")
+    private BidEntity bid;
     @Column
     private Integer quantitySelected;
 
