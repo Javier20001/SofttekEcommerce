@@ -32,7 +32,7 @@ public class DirEntity {
     @NotBlank
     private String codigoPostal;
 
-    @OneToMany(mappedBy = "dir")
-    private BidEntity bid;
+    /*@OneToMany(mappedBy = "dir")
+    private BidEntity bid;*/
 
 }
