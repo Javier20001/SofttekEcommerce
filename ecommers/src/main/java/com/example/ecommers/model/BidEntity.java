@@ -50,7 +50,7 @@ public class BidEntity {
     @OneToMany(mappedBy = "bid" , cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private List<ItemBidEntity> items = new ArrayList<>();
 
-    /*@OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "dir_id", referencedColumnName = "id")
-    private DirEntity dir;*/
+    private DirEntity dir;
 }
