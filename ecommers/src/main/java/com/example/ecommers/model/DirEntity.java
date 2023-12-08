@@ -11,10 +11,9 @@ import lombok.NoArgsConstructor;
 @Entity
 @Data
 public class DirEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column
     @NotBlank
@@ -30,9 +29,6 @@ public class DirEntity {
 
     @Column
     @NotBlank
-    private String codigoPostal;
-
-    /*@OneToMany(mappedBy = "dir")
-    private BidEntity bid;*/
-
+    private String postalCode;
 }
+
