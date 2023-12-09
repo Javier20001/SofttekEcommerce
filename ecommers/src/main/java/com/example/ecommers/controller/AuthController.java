@@ -2,6 +2,7 @@ package com.example.ecommers.controller;
 
 import com.example.ecommers.config.SecurityConfig;
 import com.example.ecommers.dto.*;
+import com.example.ecommers.exception.CustomHandler;
 import com.example.ecommers.model.UserEntity;
 import com.example.ecommers.security.JwtUtil;
 import com.example.ecommers.service.AuthServiceImpl;
@@ -23,6 +24,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -78,7 +80,7 @@ public class AuthController {
             UserEntity user = new UserEntity(0L,registerUserDto.getUserName(), registerUserDto.getEmail(), registerUserDto.getPassword() , null,null,authService.setRole(registerUserDto.getRoles()),true);
             authService.save(registerUserDto);
             return ResponseEntity.ok().body(authService.generateToken(registerUserDto.getEmail(), registerUserDto.getPassword(),user));
-        } catch (RuntimeException re) {
+        } catch (CustomHandler | HandlerMethodValidationException re) {
             return new ResponseEntity<>(re.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }

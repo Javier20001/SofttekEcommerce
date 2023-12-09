@@ -5,6 +5,6 @@ import com.example.ecommers.model.DirEntity;
 import java.util.Optional;
 
 public interface I_DirService {
-    Optional<DirEntity> getDirById(Long id);
+    Optional<DirEntity> getDirByIdDir(Long id);
     void saveDir(DirEntity dir);
 }
