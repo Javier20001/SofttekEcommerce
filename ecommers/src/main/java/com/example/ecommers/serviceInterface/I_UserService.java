@@ -19,4 +19,6 @@ public interface I_UserService {
     //Borra un usuario
     void deleteUser(Long id);
 
+    Integer countUsers();
+
 }

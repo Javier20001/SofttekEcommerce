@@ -21,4 +21,8 @@ public interface I_UserRepository extends JpaRepository<UserEntity, Long> {
     Optional<UserEntity> findByUserName(@Param("userName") String userName);
     @Query("SELECT p FROM UserEntity p WHERE p.resetToken = :token AND p.status = true AND p.expirationDate > CURRENT_TIMESTAMP")
     Optional<UserEntity> findByToken(@Param("token") String token);
+
+
+    @Query("SELECT COUNT(u) FROM UserEntity u")
+    Integer countUsers();
 }
