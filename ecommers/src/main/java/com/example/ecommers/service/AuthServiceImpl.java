@@ -13,6 +13,7 @@ import com.example.ecommers.security.JwtUtil;
 import com.example.ecommers.serviceInterface.I_AuthService;
 import com.example.ecommers.serviceInterface.I_RoleService;
 import com.example.ecommers.serviceInterface.I_UserService;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -38,40 +39,41 @@ import java.util.*;
  * @Service Indicates that this class is a Spring service component.
  */
 @Service
+@RequiredArgsConstructor
 public class AuthServiceImpl implements I_AuthService {
 
     /**
      * Autowired field for the user repository, providing data access methods.
      */
-    @Autowired
-    private I_UserRepository userRepository;
+
+    final private I_UserRepository userRepository;
 
     /**
      * Autowired field for the ModelMapper, facilitating object mapping.
      */
-    @Autowired
-    private ModelMapper modelMapper;
+
+    private final ModelMapper modelMapper;
 
     /**
      * Autowired field for the role service, providing role-related business logic.
      */
-    @Autowired
-    private I_RoleService roleService;
+
+    final private I_RoleService roleService;
 
     /**
      * Autowired field for the password encoder, providing password encryption functionality.
      */
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
-    @Autowired
-    EmailService emailService;
+    private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private JwtUtil jwtUtil;
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    private final EmailService emailService;
+
+
+    private final JwtUtil jwtUtil;
+
+
+    private final AuthenticationManager authenticationManager;
 
     /**
      * Saves a new user based on the provided RegisterUserDTO.

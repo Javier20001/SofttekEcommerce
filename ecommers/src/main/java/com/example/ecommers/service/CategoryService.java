@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 import jakarta.persistence.EntityExistsException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,13 +21,14 @@ import org.springframework.stereotype.Service;
  * @see com.example.ecommers.serviceInterface.I_CategoryService
  */
 @Service
+@RequiredArgsConstructor
 public class CategoryService implements I_CategoryService {
 
     /**
      * Repository interface for accessing and managing category entities in the database.
      */
-    @Autowired
-    private I_CategoryRepository categoryRepository;
+
+    private final I_CategoryRepository categoryRepository;
 
     /**
      * Retrieves a list of all product categories.

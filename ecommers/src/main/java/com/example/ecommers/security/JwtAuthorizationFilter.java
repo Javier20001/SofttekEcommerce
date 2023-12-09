@@ -5,6 +5,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,13 +20,13 @@ import java.io.IOException;
  * This filter intercepts incoming requests to validate and authorize JWT tokens.
  */
 @Component
+@RequiredArgsConstructor
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
-    @Autowired
-    private JwtUtil jwtUtil;
+    private final JwtUtil jwtUtil;
 
-    @Autowired
-    private UserDetailsService userService;
+
+    private final UserDetailsService userService;
 
     /**
      * Filters incoming requests to check and validate JWT tokens for authorization.

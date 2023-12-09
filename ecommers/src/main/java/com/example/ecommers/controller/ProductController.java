@@ -13,6 +13,7 @@ import java.util.List;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,15 +32,14 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/product")
 @CrossOrigin(origins = "http://localhost:5173")
-@NoArgsConstructor
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ProductController {
 
     /**
      * Service interface for handling product-related business logic.
      */
-    @Autowired
-    private I_ProductService service;
+
+     private final I_ProductService service;
 
     /**
      * Retrieves a list of all products.

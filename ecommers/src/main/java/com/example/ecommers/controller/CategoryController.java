@@ -3,7 +3,7 @@ package com.example.ecommers.controller;
 import com.example.ecommers.model.CategoryEntity;
 import com.example.ecommers.service.CategoryService;
 import com.example.ecommers.serviceInterface.I_CategoryService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,23 +22,20 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/category")
 @CrossOrigin(origins = "http://localhost:5173")
+@RequiredArgsConstructor
 public class CategoryController {
 
     /**
      * Service interface for handling category-related business logic.
      */
-    private final I_CategoryService categoryService;
+     private final I_CategoryService categoryService;
 
     /**
      * Constructor for CategoryController.
      *
      * @param categoryService The service responsible for category-related operations.
-     * @Autowired Annotation for automatic dependency injection.
+     *  Annotation for automatic dependency injection.
      */
-    @Autowired
-    public CategoryController(CategoryService categoryService) {
-        this.categoryService = categoryService;
-    }
 
     /**
      * Retrieves a list of all categories.

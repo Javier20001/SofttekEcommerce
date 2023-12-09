@@ -4,6 +4,7 @@ import com.example.ecommers.model.RoleEntity;
 import com.example.ecommers.model.RolesName;
 import com.example.ecommers.model.UserEntity;
 import com.example.ecommers.repository.I_UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -14,16 +15,14 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 public class UserInitializer implements ApplicationRunner{
-    @Autowired
+
     private final I_UserRepository i_userRepository;
 
-    public UserInitializer(I_UserRepository iUserRepository) {
-        i_userRepository = iUserRepository;
-    }
 
-    @Autowired
-    private PasswordEncoder pass;
+
+    private final PasswordEncoder pass;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {

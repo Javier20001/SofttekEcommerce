@@ -5,6 +5,7 @@ import com.example.ecommers.dto.DashboardUserDTO;
 import com.example.ecommers.model.UserEntity;
 import com.example.ecommers.repository.I_UserRepository;
 import com.example.ecommers.serviceInterface.I_UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,10 +14,11 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class UserService implements I_UserService {
 
-    @Autowired
-    private I_UserRepository userRepository;
+
+    private final I_UserRepository userRepository;
 
     //Recupera un usuario por su ID
     public Optional<UserEntity> getUserById(Long id) {
