@@ -5,6 +5,7 @@ import com.example.ecommers.model.BidEntity;
 import com.example.ecommers.repository.I_BidRepository;
 import com.example.ecommers.serviceInterface.I_BidService;
 import jakarta.validation.constraints.NotNull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,11 +13,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class BidService implements I_BidService {
 
 
-    @Autowired
-    private I_BidRepository bidRepository;
+
+    private final I_BidRepository bidRepository;
 
     @Override
     public List<BidEntity> getAllBid() {

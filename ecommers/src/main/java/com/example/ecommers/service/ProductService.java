@@ -99,7 +99,7 @@ public class ProductService implements I_ProductService {
                 // Save the product after handling the category
                 return productRepository.save(productEntity);
             }
-        } catch (ProductAlrdyExist ex) {
+        } catch (ProductAlrdyExist ex) {    
             // Catch and rethrow the specific exception for GlobalExceptionHandler
             throw ex;
         } catch (Exception e) {

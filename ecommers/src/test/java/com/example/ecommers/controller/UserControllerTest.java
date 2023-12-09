@@ -8,6 +8,7 @@ import com.example.ecommers.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,21 +32,15 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @WebAppConfiguration
 @AutoConfigureMockMvc
+@RequiredArgsConstructor
 class UserControllerTest {
 
     private final static String BASE_URL = "/api/v1/admin/user";
 
-    @Autowired
-    private MockMvc mockMvc;
 
-    @Mock
-    private UserService userService;
+    private final MockMvc mockMvc;
 
-    @Mock
-    private I_UserRepository repository;
 
-    @Autowired
-    private WebApplicationContext webApplicationContext;
 
     private UserEntity user;
 

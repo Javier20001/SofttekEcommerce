@@ -4,6 +4,7 @@ package com.example.ecommers.controller;
 import com.example.ecommers.model.UserEntity;
 import com.example.ecommers.service.UserService;
 import com.example.ecommers.serviceInterface.I_UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,9 +13,10 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/admin/user")
 @CrossOrigin(origins = "http://localhost:5173")
+@RequiredArgsConstructor
 public class UserController {
-    @Autowired
-    UserService userService;
+
+    private final UserService userService;
 
 
     @PutMapping("/update/{id}")
