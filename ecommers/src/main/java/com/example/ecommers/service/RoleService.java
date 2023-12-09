@@ -4,6 +4,8 @@ import com.example.ecommers.model.RoleEntity;
 import com.example.ecommers.repository.I_RoleRepository;
 import java.util.List;
 import java.util.Optional;
+
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.ecommers.serviceInterface.I_RoleService;
@@ -19,14 +21,15 @@ import com.example.ecommers.serviceInterface.I_RoleService;
  * @see com.example.ecommers.serviceInterface.I_RoleService
  */
 @Service
+@RequiredArgsConstructor
 public class RoleService implements I_RoleService{
     
     
     /**S
      * Repository interface for accessing and managing role entities in the database.
      */
-    @Autowired
-    private I_RoleRepository RoleRepository;
+
+    private final I_RoleRepository RoleRepository;
     
     /**
      * Retrieves a list of all role.

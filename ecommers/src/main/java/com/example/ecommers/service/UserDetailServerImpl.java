@@ -2,6 +2,7 @@ package com.example.ecommers.service;
 import com.example.ecommers.exception.CustomHandler;
 import com.example.ecommers.model.UserEntity;
 import com.example.ecommers.repository.I_UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -18,10 +19,11 @@ import java.util.stream.Collectors;
  * This service class provides user details and authentication information for Spring Security.
  */
 @Service
+@RequiredArgsConstructor
 public class UserDetailServerImpl implements UserDetailsService {
 
-    @Autowired
-    private I_UserRepository userRepository;
+
+    private final I_UserRepository userRepository;
 
     /**
      * Loads user details by username for authentication and authorization.

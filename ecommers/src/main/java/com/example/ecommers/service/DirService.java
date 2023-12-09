@@ -3,15 +3,17 @@ package com.example.ecommers.service;
 import com.example.ecommers.model.DirEntity;
 import com.example.ecommers.repository.I_DirRepository;
 import com.example.ecommers.serviceInterface.I_DirService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class DirService implements I_DirService {
-    @Autowired
-    I_DirRepository dirRepository;
+
+     private final I_DirRepository dirRepository;
     @Override
     public Optional<DirEntity> getDirByIdDir(Long id) {
         try{

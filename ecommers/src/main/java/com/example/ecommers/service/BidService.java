@@ -21,13 +21,13 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class BidService implements I_BidService {
 
 
-    @Autowired
-    private I_BidRepository bidRepository;
+
+    private final I_BidRepository bidRepository;
 
 
     private final I_UserRepository userRepository;

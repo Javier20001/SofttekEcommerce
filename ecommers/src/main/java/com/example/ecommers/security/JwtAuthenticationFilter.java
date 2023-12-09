@@ -7,6 +7,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,27 +24,13 @@ import java.util.Map;
 /**
  * This filter handles authentication attempts using JWT tokens.
  */
+
+@RequiredArgsConstructor
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
-    private JwtUtil jwtUtil;
+    private final JwtUtil jwtUtil;
 
-    /**
-     * Constructs a JwtAuthenticationFilter with the given JwtUtil instance.
-     *
-     * @param jwtUtil The JwtUtil instance for generating JWT tokens.
-     */
-    public JwtAuthenticationFilter(JwtUtil jwtUtil) {
-        this.jwtUtil = jwtUtil;
-    }
 
-    /**
-     * Attempts user authentication based on the provided credentials.
-     *
-     * @param request  The HTTP request object.
-     * @param response The HTTP response object.
-     * @return An Authentication object representing the user's authentication status.
-     * @throws AuthenticationException If an authentication error occurs.
-     */
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         UserEntity userEntity = null;

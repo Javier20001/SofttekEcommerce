@@ -12,6 +12,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -36,21 +37,14 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @WebAppConfiguration
 @AutoConfigureMockMvc
+@RequiredArgsConstructor
 class ProductControllerTest {
 
     private final static String BASE_URL = "/api/v1/product";
 
-    @Autowired
-    private MockMvc mockMvc;
+    private final MockMvc mockMvc;
 
-    @Mock
-    private ProductService productService;
-
-
-    @Autowired
-    private WebApplicationContext webApplicationContext;
-
-    private ProductEntity product;
+    private  ProductEntity product;
 
     @BeforeEach
     void setUp() {

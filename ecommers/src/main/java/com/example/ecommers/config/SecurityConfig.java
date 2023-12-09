@@ -3,6 +3,7 @@ package com.example.ecommers.config;
 import com.example.ecommers.security.JwtAuthenticationFilter;
 import com.example.ecommers.security.JwtAuthorizationFilter;
 import com.example.ecommers.security.JwtUtil;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,27 +26,28 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
     /**
      * Utilidad para operaciones relacionadas con JWT (JSON Web Token).
      * Esta instancia se inyectará automáticamente utilizando la anotación @Autowired.
      */
-    @Autowired
-    private JwtUtil jwtUtil;
+
+     private final JwtUtil jwtUtil;
 
     /**
      * Filtro de autorización basado en JWT.
      * Esta instancia se inyectará automáticamente utilizando la anotación @Autowired.
      */
-    @Autowired
-    private JwtAuthorizationFilter jwtAuthorizationFilter;
+
+    private final JwtAuthorizationFilter jwtAuthorizationFilter;
 
     /**
      * Detalles del servicio de usuario utilizado para la autenticación.
      * Esta instancia se inyectará automáticamente utilizando la anotación @Autowired.
      */
-    @Autowired
-    private UserDetailsService userDetailService;
+    
+    private final UserDetailsService userDetailService;
 
     /**
      * Configuración del filtro de seguridad para las solicitudes HTTP.

@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,18 +36,18 @@ import java.util.Map;
 @RestController
 @CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/api/v1/auth")
-@AllArgsConstructor
-@NoArgsConstructor
+
+@RequiredArgsConstructor
 public class AuthController {
 
-    @Autowired
-    private AuthServiceImpl authService;
 
-    @Autowired
-    private JwtUtil jwtUtil;
+    private final AuthServiceImpl authService;
 
-    @Autowired
-    private SecurityConfig securityConfig;
+
+    private final JwtUtil jwtUtil;
+
+
+    private final SecurityConfig securityConfig;
 
 
     /**

@@ -5,6 +5,7 @@ import com.example.ecommers.model.ProductEntity;
 import com.example.ecommers.repository.I_ItemBidRepository;
 import com.example.ecommers.serviceInterface.I_ItemBidService;
 import jakarta.validation.constraints.NotNull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,11 +13,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class ItemBidService implements I_ItemBidService {
 
 
-    @Autowired
-    private I_ItemBidRepository itemBidRepository;
+
+    private final I_ItemBidRepository itemBidRepository;
 
     public List<ItemBidEntity> getAllItemsBid() {
         try {
