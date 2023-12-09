@@ -2,7 +2,11 @@ package com.example.ecommers.controller;
 
 import com.example.ecommers.dto.BidDTO;
 import com.example.ecommers.dto.PaymentMPDTO;
-import com.example.ecommers.model.ItemEntity;
+import com.example.ecommers.model.*;
+import com.example.ecommers.repository.I_UserRepository;
+import com.example.ecommers.serviceInterface.I_BidService;
+import com.example.ecommers.serviceInterface.I_ProductService;
+import com.google.gson.Gson;
 import com.mercadopago.client.preference.PreferenceBackUrlsRequest;
 import com.mercadopago.client.preference.PreferenceClient;
 import com.mercadopago.client.preference.PreferenceItemRequest;
@@ -11,6 +15,8 @@ import com.mercadopago.exceptions.MPApiException;
 import com.mercadopago.exceptions.MPException;
 import com.mercadopago.resources.preference.Preference;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +27,12 @@ import java.util.List;
 @RestController
 @CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/api/v1/product/mercadoPago")
+@RequiredArgsConstructor
 public class MpController {
+
+    private final I_BidService bidService;
+    private final I_ProductService productService;
+
     @PostMapping("/compra")
     @CrossOrigin(origins = "https://www.mercadopago.com/")
     public ResponseEntity<String> mercadoPago(@Valid @RequestBody PaymentMPDTO paymentMPDTO) throws MPException, MPApiException {
@@ -69,11 +80,14 @@ public class MpController {
     }
 
     @PostMapping("/newBid")
-    public ResponseEntity<String> createBid(@Valid @RequestBody BidDTO bidDTO) {
+    public ResponseEntity<?> createBid(@Valid @RequestBody BidDTO bidDTO) {
         try {
-            //bidService.save(bidDTO);
-            System.out.println(bidDTO.toString());
-            return new  ResponseEntity<>("Bid Created!",HttpStatus.CREATED);
+            System.out.println("BID  dto:"+bidDTO.toString());
+            bidService.saveBid(bidDTO);
+            List<ProductEntity>products=productService.findByStatusTrue();
+            Gson gson = new Gson();
+            String json = gson.toJson(products);
+            return new  ResponseEntity<>(json,HttpStatus.CREATED);
         }catch (RuntimeException re){
             return new ResponseEntity<>(re.getMessage(),HttpStatus.BAD_REQUEST);
         }

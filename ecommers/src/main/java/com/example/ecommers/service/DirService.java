@@ -13,7 +13,7 @@ public class DirService implements I_DirService {
     @Autowired
     I_DirRepository dirRepository;
     @Override
-    public Optional<DirEntity> getDirById(Long id) {
+    public Optional<DirEntity> getDirByIdDir(Long id) {
         try{
             Optional<DirEntity> optDir = dirRepository.findById(id);
             if(optDir.isPresent()){

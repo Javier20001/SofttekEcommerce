@@ -1,11 +1,11 @@
 package com.example.ecommers.dto;
 
+import com.example.ecommers.model.ItemBidEntity;
 import com.example.ecommers.model.ItemEntity;
 import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -15,7 +15,7 @@ public class BidDTO {
     private String locality;
     private String street;
     private String streetNumber;
-    private String userName;
+    private String token;
     private Boolean isApartment;
     private String floorNumber;
     private String apartmentNumber;

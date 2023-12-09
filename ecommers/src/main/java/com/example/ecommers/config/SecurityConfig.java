@@ -146,11 +146,6 @@ public class SecurityConfig {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.isAuthenticated()) {
             String token = jwtUtil.extractTokenFromAuthentication(authentication);
-            // Agrega la lógica para marcar el token como inválido (por ejemplo, agregar a una lista negra)
-            // Esto dependerá de cómo estás manejando la validez de los tokens en tu aplicación
-            // Puedes tener una lista en memoria, una base de datos, etc.
-//             jwtUtil.addToBlacklist(token);
-            System.out.println("Token invalidado: " + token);
         } else {
             System.out.println("No hay un usuario autenticado con un token JWT.");
         }
