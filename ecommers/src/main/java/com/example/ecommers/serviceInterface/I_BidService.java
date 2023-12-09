@@ -1,5 +1,6 @@
 package com.example.ecommers.serviceInterface;
 
+import com.example.ecommers.dto.BidDTO;
 import com.example.ecommers.model.BidEntity;
 
 import java.util.List;
@@ -36,7 +37,7 @@ public interface I_BidService {
      * @return BidEntity The saved bid.
      * @see com.example.ecommers.model.BidEntity
      */
-    BidEntity saveBid(BidEntity bid);
+    BidEntity saveBid(BidDTO bid);
 
 
 }
