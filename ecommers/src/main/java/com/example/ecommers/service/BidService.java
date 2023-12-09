@@ -40,7 +40,6 @@ public class BidService implements I_BidService {
         try{
             return bidRepository.findAll();
         }catch(Exception e){
-            e.printStackTrace();
             throw new RuntimeException("failure to bring the invoice. Reason: " + e.getMessage());
         }
     }
@@ -49,8 +48,7 @@ public class BidService implements I_BidService {
     public Optional<BidEntity> getBidById(Long id) {
         try {
             return bidRepository.findById(id);
-        }catch( Exception e) {
-            e.printStackTrace();
+        }catch( RuntimeException e) {
             throw new RuntimeException("failure to bring the invoice by id. Reason: " + e.getMessage());
         }
     }
@@ -62,35 +60,46 @@ public class BidService implements I_BidService {
             throw new IllegalArgumentException("bid id must be null for save operation.");
         }
         try{
-            UserEntity userEntity=null;
-            if (userRepository.findByEmail(jwtUtil.getUserNameToken(bidDTO.getToken())).isPresent()){
-                userEntity=userRepository.findByEmail(jwtUtil.getUserNameToken(bidDTO.getToken())).get();
-            }
+            UserEntity userEntity=createUser(bidDTO);
             DirEntity dir=modelMapper.map(bidDTO,DirEntity.class);
 
             BidEntity bid=bidRepository.save(BidEntity.builder()
                             .user(userEntity)
                             .dir(dir)
                     .build());
-
-            for (ItemEntity item : bidDTO.getLstItem()) {
-                ItemBidEntity itemRequest = ItemBidEntity.builder()
-                        .idProduct(item.getProduct().getIdProduct())
-                        .quantitySelected(item.getQuantitySelected())
-                        .bid(bid)
-                        .build();
-                iItemBidService.saveItem(itemRequest);
-
-                if (productService.getProductById(itemRequest.getIdProduct()).isPresent()){
-                    ProductEntity productEntity=productService.getProductById(itemRequest.getIdProduct()).get();
-                    System.out.println(productEntity.getProductStock());
-                    productEntity.setProductStock(productEntity.getProductStock()-itemRequest.getQuantitySelected());
-                    System.out.println(productEntity.getProductStock());
-                }
-            }
+            saveItem(bidDTO,bid);
             return bid;
         }catch(Exception e){
             throw new RuntimeException("Error saving bid: " + e.getMessage(), e);
         }
     }
+    private UserEntity createUser(BidDTO bidDTO){
+        UserEntity userEntity=null;
+        if (userRepository.findByEmail(jwtUtil.getUserNameToken(bidDTO.getToken())).isPresent()){
+            userEntity=userRepository.findByEmail(jwtUtil.getUserNameToken(bidDTO.getToken())).get();
+        }
+        return userEntity;
+    }
+    private void saveItem (BidDTO bidDTO,BidEntity bid){
+        for (ItemEntity item : bidDTO.getLstItem()) {
+            ItemBidEntity itemRequest = ItemBidEntity.builder()
+                    .idProduct(item.getProduct().getIdProduct())
+                    .quantitySelected(item.getQuantitySelected())
+                    .bid(bid)
+                    .build();
+            iItemBidService.saveItem(itemRequest);
+            descontarStock(itemRequest);
+        }
+    }
+
+    private void descontarStock(ItemBidEntity itemRequest){
+        if (productService.getProductById(itemRequest.getIdProduct()).isPresent()){
+            ProductEntity productEntity=productService.getProductById(itemRequest.getIdProduct()).get();
+            productEntity.setProductStock(productEntity.getProductStock()-itemRequest.getQuantitySelected());
+            if (productEntity.getProductStock()==0){
+                productService.deleteProduct(productEntity.getIdProduct());
+            }
+        }
+    }
+
 }

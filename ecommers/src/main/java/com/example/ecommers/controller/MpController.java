@@ -52,7 +52,6 @@ public class MpController {
 
                 items.add(itemRequest);
             }
-
             PreferenceRequest preferenceRequest = PreferenceRequest.builder()
                     .items(items)
                     .backUrls(PreferenceBackUrlsRequest.builder()
@@ -64,7 +63,6 @@ public class MpController {
                     .build();
             PreferenceClient client = new PreferenceClient();
             Preference preference = client.create(preferenceRequest);
-
 
             // Aquí podrías devolver el ID de la preferencia o cualquier otra información que necesites.
             return ResponseEntity.ok(preference.getId());
