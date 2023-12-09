@@ -41,6 +41,7 @@ import java.util.*;
  */
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class AuthServiceImpl implements I_AuthService {
 
     /**
@@ -83,7 +84,6 @@ public class AuthServiceImpl implements I_AuthService {
      * @return The saved RegisterUserDTO.
      * @throws RuntimeException if a user with the same email already exists.
      */
-    @Transactional
     @Override
     public RegisterUserDTO save(RegisterUserDTO user) throws RuntimeException {
 

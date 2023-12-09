@@ -7,8 +7,11 @@ import com.example.ecommers.repository.I_ProductRepository;
 import com.example.ecommers.serviceInterface.I_CategoryService;
 import com.example.ecommers.serviceInterface.I_ProductService;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -22,19 +25,21 @@ import java.util.Optional;
  * @see com.example.ecommers.serviceInterface.I_ProductService
  */
 @Service
+@RequiredArgsConstructor
+@Transactional
 public class ProductService implements I_ProductService {
 
     /**
      * Repository interface for accessing and managing product entities in the database.
      */
-    @Autowired
-    private I_ProductRepository productRepository;
+
+    private final I_ProductRepository productRepository;
 
     /**
      * Service interface for handling category-related business logic.
      */
-    @Autowired
-    private I_CategoryService categoryService;
+
+    private final I_CategoryService categoryService;
 
     /**
      * Retrieves a list of all products.
