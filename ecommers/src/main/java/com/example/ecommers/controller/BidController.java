@@ -54,4 +54,14 @@ public class BidController {
             return new ResponseEntity<>(re.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+
+
+    @GetMapping("/count")
+    public ResponseEntity<?> countBid(){
+        try{
+            return new ResponseEntity<>(service.countBid(), HttpStatus.OK);
+        }catch (RuntimeException e){
+            return new ResponseEntity<>("Users not found", HttpStatus.BAD_REQUEST);
+        }
+    }
 }
