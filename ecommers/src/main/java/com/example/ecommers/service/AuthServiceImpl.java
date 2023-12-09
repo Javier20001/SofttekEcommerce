@@ -12,7 +12,6 @@ import com.example.ecommers.repository.I_UserRepository;
 import com.example.ecommers.security.JwtUtil;
 import com.example.ecommers.serviceInterface.I_AuthService;
 import com.example.ecommers.serviceInterface.I_RoleService;
-import com.example.ecommers.serviceInterface.I_UserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,17 +23,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.method.annotation.HandlerMethodValidationException;
-
-
 import java.time.LocalDateTime;
 import java.util.*;
 
 /**
- * Implementation of the {@link I_UserService} interface, providing authentication
+ * Implementation of the {@link I_AuthService} interface, providing authentication
  * and user-related operations for the application.
  *
  * @Service Indicates that this class is a Spring service component.
@@ -43,38 +36,30 @@ import java.util.*;
 @RequiredArgsConstructor
 @Transactional
 public class AuthServiceImpl implements I_AuthService {
-
+    
+    
     /**
-     * Autowired field for the user repository, providing data access methods.
-     */
-
-    final private I_UserRepository userRepository;
-
+    * Autowired field for the user repository, providing data access methods.
+    */
+    private final I_UserRepository userRepository;
+    
     /**
-     * Autowired field for the ModelMapper, facilitating object mapping.
-     */
-
+    * Autowired field for the ModelMapper, facilitating object mapping.
+    */
     private final ModelMapper modelMapper;
-
+    
     /**
-     * Autowired field for the role service, providing role-related business logic.
-     */
-
-    final private I_RoleService roleService;
-
+    * Autowired field for the role service, providing role-related business logic.
+    */
+    private final I_RoleService roleService;
+    
     /**
-     * Autowired field for the password encoder, providing password encryption functionality.
-     */
-
+    * Autowired field for the password encoder, providing password encryption functionality.
+    */
     private final PasswordEncoder passwordEncoder;
-
-
+    
     private final EmailService emailService;
-
-
     private final JwtUtil jwtUtil;
-
-
     private final AuthenticationManager authenticationManager;
 
     /**
@@ -86,18 +71,20 @@ public class AuthServiceImpl implements I_AuthService {
      */
     @Override
     public RegisterUserDTO save(RegisterUserDTO user) throws RuntimeException {
-
         List<RoleEntity> userRoles = new ArrayList<>();
         UserEntity userEntity = modelMapper.map(user, UserEntity.class);
         userEntity.setPassword(passwordEncoder.encode(user.getPassword()));
         userEntity.setRoles(setRole(user.getRoles()));
         userEntity.setStatus(true);
 
-        if (userRepository.findByEmail(userEntity.getEmail()).isPresent()) {
-            throw new UserAlrdyExist("This user email already exist");
-        } else if(userRepository.findByUserName(userEntity.getUserName()).isPresent()){
-            throw new UserAlrdyExist("This user name already exist");
-        }else{
+        Optional<UserEntity> existingUserByEmail = userRepository.findByEmail(userEntity.getEmail());
+        Optional<UserEntity> existingUserByUserName = userRepository.findByUserName(userEntity.getUserName());
+
+        if (existingUserByEmail.isPresent()) {
+            throw new UserAlrdyExist("This user email already exists");
+        } else if (existingUserByUserName.isPresent()) {
+            throw new UserAlrdyExist("This user name already exists");
+        } else {
             try {
                 userRepository.save(userEntity);
             } catch (CustomHandler e) {
@@ -115,40 +102,40 @@ public class AuthServiceImpl implements I_AuthService {
      */
     @Override
     public Optional<UserEntity> findByEmail(String email) {
-        UserEntity user = userRepository.findByEmail(email).get();
-        Optional<UserEntity> userEntity = null;
-
-        if (user.getStatus()) {
-            userEntity = userRepository.findByEmail(email);
-        }
-        return userEntity;
+        Optional<UserEntity> userEntity = userRepository.findByEmail(email);
+        return userEntity.filter(UserEntity::getStatus);
     }
 
+    /**
+     * Initiates the password reset process by generating a reset token and sending an email to the user.
+     *
+     * @param email The email of the user requesting the password reset.
+     */
     @Override
     public void resetRequest(String email) {
         Optional<UserEntity> optUser = userRepository.findByEmail(email);
-        if(optUser.isPresent()){
-            UserEntity user = optUser.get();
+        optUser.ifPresent(user -> {
             user.setResetToken(UUID.randomUUID().toString());
             user.setExpirationDate(LocalDateTime.now().plusHours(2));
             userRepository.save(user);
             String resetLink = "http://localhost:5173/password/new/" + user.getResetToken();
             emailService.sendEmail(email, "Password Recovery", "Hello, this is your reset request email. To reset your password, visit  <a href='"+resetLink+"'>"+resetLink+"</a>");
-        }else{
-            System.out.println("error user not found");
-        }
-    }
-    public void resetPassword(ResetPasswordUserDTO resetPasswordUserDTO){
-        Optional<UserEntity> optUser = userRepository.findByToken(resetPasswordUserDTO.getResetToken());
-        if(optUser.isPresent()){
-            UserEntity user = optUser.get();
-            user.setPassword(passwordEncoder.encode(resetPasswordUserDTO.getPassword()));
-            userRepository.save(user);
-        }else{
-            System.out.println("error");
-        }
+        });
     }
 
+    /**
+     * Resets the password for a user based on the reset token.
+     *
+     * @param resetPasswordUserDTO The DTO containing the reset token and new password.
+     */
+    @Override
+    public void resetPassword(ResetPasswordUserDTO resetPasswordUserDTO) {
+        Optional<UserEntity> optUser = userRepository.findByToken(resetPasswordUserDTO.getResetToken());
+        optUser.ifPresent(user -> {
+            user.setPassword(passwordEncoder.encode(resetPasswordUserDTO.getPassword()));
+            userRepository.save(user);
+        });
+    }
 
     /**
      * Sets roles for a user based on the provided role IDs.
@@ -157,7 +144,7 @@ public class AuthServiceImpl implements I_AuthService {
      * @return A list of Role entities corresponding to the provided role IDs.
      * @throws RuntimeException if there is an error adding roles to the user.
      */
-    public List<RoleEntity> setRole(List<Long> roles) {
+        public List<RoleEntity> setRole(List<Long> roles) {
         List<RoleEntity> aux = new ArrayList<>();
         for (int i = 0; i < roles.size(); i++) {
             try {
@@ -169,7 +156,9 @@ public class AuthServiceImpl implements I_AuthService {
         }
         return aux;
     }
+
     private Random random = new Random();
+
     /**
      * Generates a random long ID.
      *
@@ -179,7 +168,7 @@ public class AuthServiceImpl implements I_AuthService {
         return random.nextLong();
     }
 
-    public LoginResponseDTO generateToken(String email, String password, UserEntity user){
+    public LoginResponseDTO generateToken(String email, String password, UserEntity user) {
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -205,3 +194,5 @@ public class AuthServiceImpl implements I_AuthService {
         return loginResponseDTO;
     }
 }
+
+
