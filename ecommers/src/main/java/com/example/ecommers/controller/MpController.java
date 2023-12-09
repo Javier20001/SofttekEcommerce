@@ -3,7 +3,6 @@ package com.example.ecommers.controller;
 import com.example.ecommers.dto.BidDTO;
 import com.example.ecommers.dto.PaymentMPDTO;
 import com.example.ecommers.model.*;
-import com.example.ecommers.repository.I_UserRepository;
 import com.example.ecommers.serviceInterface.I_BidService;
 import com.example.ecommers.serviceInterface.I_ProductService;
 import com.google.gson.Gson;
@@ -16,7 +15,6 @@ import com.mercadopago.exceptions.MPException;
 import com.mercadopago.resources.preference.Preference;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,6 +36,7 @@ public class MpController {
     public ResponseEntity<String> mercadoPago(@Valid @RequestBody PaymentMPDTO paymentMPDTO) throws MPException, MPApiException {
         try {
             MercadoPagoConfig.setAccessToken("TEST-5642789275818402-120519-ce2348b6a2e786844849c5e1f8aa2e42-498645273");
+
             List<PreferenceItemRequest> items = new ArrayList<>();
             for (ItemEntity item : paymentMPDTO.getLstItem()) {
                 PreferenceItemRequest itemRequest = PreferenceItemRequest.builder()
@@ -49,7 +48,6 @@ public class MpController {
                         .quantity(item.getQuantitySelected())
                         .unitPrice(item.getProduct().getProductPrice())
                         .build();
-
                 items.add(itemRequest);
             }
             PreferenceRequest preferenceRequest = PreferenceRequest.builder()
@@ -80,7 +78,6 @@ public class MpController {
     @PostMapping("/newBid")
     public ResponseEntity<?> createBid(@Valid @RequestBody BidDTO bidDTO) {
         try {
-            System.out.println("BID  dto:"+bidDTO.toString());
             bidService.saveBid(bidDTO);
             List<ProductEntity>products=productService.findByStatusTrue();
             Gson gson = new Gson();

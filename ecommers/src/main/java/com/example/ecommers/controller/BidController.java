@@ -9,10 +9,10 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 /**
@@ -44,12 +44,14 @@ public class BidController {
      * @GetMapping("/list") Mapping for the endpoint to retrieve the list of all bids.
      */
     @GetMapping("/list")
-    public String list(){
-        List<BidEntity> list = service.getAllBid();
-        Gson gson = new Gson();
-        String json = gson.toJson(list);
-        System.out.println();
-        return json;
-
+    public ResponseEntity<?> list(){
+        try {
+            List<BidEntity> list = service.getAllBid();
+            Gson gson = new Gson();
+            String json = gson.toJson(list);
+            return new ResponseEntity<>(json, HttpStatus.OK);
+        }catch (RuntimeException re){
+            return new ResponseEntity<>(re.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 }
