@@ -92,4 +92,22 @@ public class UserService implements I_UserService {
             throw new RuntimeException("Error retrieving the User", e);
         }
     }
+
+    public Integer countUsers() {
+        try {
+            // Use Optional to handle the possibility of null value
+            Optional<Integer> countOptional = Optional.ofNullable(userRepository.countUsers());
+
+
+            return countOptional.orElseThrow(() -> new RuntimeException("Count of users is null"));
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+
+            throw new RuntimeException("Failed to count users. Reason: " + e.getMessage());
+        }
+    }
 }
+
