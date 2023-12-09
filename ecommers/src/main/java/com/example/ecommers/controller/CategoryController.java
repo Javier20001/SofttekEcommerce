@@ -44,9 +44,12 @@ public class CategoryController {
      * @GetMapping("/list") Mapping for the endpoint to retrieve the list of all categories.
      */
     @GetMapping("/list")
-    public ResponseEntity<List<CategoryEntity>> getAllCategories() {
-        List<CategoryEntity> categories = categoryService.getAllCategory();
-        return new ResponseEntity<>(categories, HttpStatus.OK);
+    public ResponseEntity<?> getAllCategories() {
+        try {
+            return new ResponseEntity<>(categoryService.getAllCategory(), HttpStatus.OK);
+        }catch(Exception e){
+            return new ResponseEntity<>("Error while searching for categories", HttpStatus.BAD_REQUEST);
+        }
     }
 
     /**
@@ -57,9 +60,12 @@ public class CategoryController {
      * @PostMapping("/new") Mapping for the endpoint to save a new category.
      */
     @PostMapping("/new")
-    public ResponseEntity<CategoryEntity> saveCategory(@RequestBody CategoryEntity category) {
-        CategoryEntity savedCategory = categoryService.saveCategory(category);
-        return new ResponseEntity<>(savedCategory, HttpStatus.CREATED);
+    public ResponseEntity<?> saveCategory(@RequestBody CategoryEntity category) {
+        try {
+            return new ResponseEntity<>(categoryService.saveCategory(category), HttpStatus.CREATED);
+        }catch(Exception e){
+            return new ResponseEntity<>("Error while saving category", HttpStatus.BAD_REQUEST);
+        }
     }
 
     /**
@@ -71,9 +77,12 @@ public class CategoryController {
      * @PutMapping("update/{id}") Mapping for the endpoint to update an existing category.
      */
     @PutMapping("update/{id}")
-    public ResponseEntity<CategoryEntity> updateCategory(@PathVariable Long id, @RequestBody CategoryEntity newCategory) {
-        CategoryEntity updatedCategory = categoryService.updateCategory(id, newCategory);
-        return new ResponseEntity<>(updatedCategory, HttpStatus.OK);
+    public ResponseEntity<?> updateCategory(@PathVariable Long id, @RequestBody CategoryEntity newCategory) {
+        try {
+            return new ResponseEntity<>(categoryService.updateCategory(id, newCategory), HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>("Error while updating category", HttpStatus.BAD_REQUEST);
+        }
     }
 
     /**
@@ -84,8 +93,12 @@ public class CategoryController {
      * @DeleteMapping("delete/{id}") Mapping for the endpoint to delete a category by its identifier.
      */
     @DeleteMapping("delete/{id}")
-    public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
-        categoryService.deleteCategory(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    public ResponseEntity<?> deleteCategory(@PathVariable Long id) {
+        try {
+            categoryService.deleteCategory(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }catch (Exception e){
+            return new ResponseEntity<>("Error while deleting category", HttpStatus.BAD_REQUEST);
+        }
     }
 }
