@@ -67,7 +67,7 @@ public class ProductController {
     public ResponseEntity<?> add(@RequestBody ProductEntity product) {
         try {
             service.saveProduct(product);
-            return new ResponseEntity<>("Se guardo correctamente", HttpStatus.CREATED);
+            return new ResponseEntity<>(product, HttpStatus.CREATED);
         } catch (ProductAlrdyExist e) {
             // Handle the specific exception thrown by the service
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -104,16 +104,16 @@ public class ProductController {
      * @return ResponseEntity<?> A response entity with a success message and HTTP status.
      * @PostMapping("/delete/{id}") Mapping for the endpoint to delete a product by its identifier.
      */
-    @PostMapping("/delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteProduct(@PathVariable Long id){
         try{
 
             service.deleteProduct(id);
 
         }catch(RuntimeException he){
-            throw new RuntimeException("Error al eliminar");
+            throw new RuntimeException("Could not eliminate");
         }
-        return new ResponseEntity<>("Se eliminó correctamente", HttpStatus.OK);
+        return new ResponseEntity<>("Product correctly eliminated", HttpStatus.OK);
     }
     @GetMapping("/find/{name}")
     public String find(@PathVariable String name){
