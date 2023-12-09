@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class BidService implements I_BidService {
 

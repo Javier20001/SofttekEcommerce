@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.ecommers.serviceInterface.I_RoleService;
+import org.springframework.transaction.annotation.Transactional;
 
 
 /**
@@ -22,6 +23,7 @@ import com.example.ecommers.serviceInterface.I_RoleService;
  */
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class RoleService implements I_RoleService{
     
     
