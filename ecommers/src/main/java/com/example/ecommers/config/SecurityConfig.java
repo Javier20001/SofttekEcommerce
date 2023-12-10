@@ -71,6 +71,7 @@ public class SecurityConfig {
                             .requestMatchers("/api/v1/product/list").permitAll()
                             .requestMatchers("/api/v1/product/find/{name}").permitAll()
                             .requestMatchers("/api/v1/admin/user/list/{username}").permitAll()
+                            .requestMatchers("/api/v1/admin/user/list").permitAll()
                             .requestMatchers("/api/v1/product/new").hasRole("ADMIN")
                             .requestMatchers("/api/v1/product/update").hasRole("ADMIN")
                             .requestMatchers("/api/v1/product/delete/{id}").hasRole("ADMIN")
