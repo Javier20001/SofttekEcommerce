@@ -6,29 +6,15 @@ import com.example.ecommers.exception.CustomHandler;
 import com.example.ecommers.model.UserEntity;
 import com.example.ecommers.security.JwtUtil;
 import com.example.ecommers.service.AuthServiceImpl;
-import com.example.ecommers.service.UserService;
-import com.example.ecommers.serviceInterface.I_AuthService;
-import com.example.ecommers.serviceInterface.I_UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
-
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * This class represents the REST controller for handling authentication and user registration.
@@ -58,12 +44,18 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginUserDTO loginUserDto) {
         try {
-            UserEntity currentUser = authService.findByEmail(loginUserDto.getEmail()).get();
+            UserEntity currentUser=null;
+            if (authService.findByEmail(loginUserDto.getEmail()).isPresent()){
+                currentUser= authService.findByEmail(loginUserDto.getEmail()).get();
+            }
             return ResponseEntity.ok()
                     .body(authService.generateToken(loginUserDto.getEmail(),loginUserDto.getPassword(),currentUser));
         } catch (BadCredentialsException e) {
-            // Return an error response if authentication fails
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.UNAUTHORIZED);
+        } catch (UsernameNotFoundException e) {
+            return new ResponseEntity<>("User not found", HttpStatus.UNAUTHORIZED);
+        } catch (Exception e) {
+            return new ResponseEntity<>("An unexpected error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

@@ -3,7 +3,6 @@ import com.example.ecommers.exception.CustomHandler;
 import com.example.ecommers.model.UserEntity;
 import com.example.ecommers.repository.I_UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -36,25 +35,29 @@ public class UserDetailServerImpl implements UserDetailsService {
      */
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        UserEntity userEntity = null;
         try {
-            userEntity = userRepository.findByEmail(email).orElseThrow(() ->
-                    new UsernameNotFoundException("Usuario no encontrado: " + email));
+
+            UserEntity userEntity = userRepository.findByEmail(email)
+                    .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + email));
+
+            Collection<? extends GrantedAuthority> authorities = userEntity.getRoles().stream()
+                    .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getName().name()))
+                    .collect(Collectors.toSet());
+
+            return new User(
+                    userEntity.getUserName(),
+                    userEntity.getPassword(),
+                    true,
+                    true,
+                    true,
+                    true,
+                    authorities
+            );
         } catch (UsernameNotFoundException e) {
+            System.out.println("Error accessing user database: User not found - " + email+ e);
+            throw e;  // Propagate the original exception
+        } catch (Exception e) {
             throw new CustomHandler("Error accessing user database");
         }
-
-        Collection<? extends GrantedAuthority> authorities = userEntity.getRoles().stream()
-                .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getName().name()))
-                .collect(Collectors.toSet());
-        return new User(
-                userEntity.getUserName(),
-                userEntity.getPassword(),
-                true,
-                true,
-                true,
-                true,
-                authorities
-        );
     }
 }

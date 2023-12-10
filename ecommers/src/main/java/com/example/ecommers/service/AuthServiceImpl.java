@@ -14,8 +14,6 @@ import com.example.ecommers.serviceInterface.I_AuthService;
 import com.example.ecommers.serviceInterface.I_RoleService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -169,7 +167,6 @@ public class AuthServiceImpl implements I_AuthService {
     }
 
     public LoginResponseDTO generateToken(String email, String password, UserEntity user) {
-
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         email,
