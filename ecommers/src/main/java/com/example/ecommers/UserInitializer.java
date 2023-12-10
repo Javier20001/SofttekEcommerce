@@ -20,8 +20,6 @@ public class UserInitializer implements ApplicationRunner{
 
     private final I_UserRepository i_userRepository;
 
-
-
     private final PasswordEncoder pass;
 
     @Override
