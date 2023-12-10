@@ -1,8 +1,10 @@
 package com.example.ecommers.service;
 
 import com.example.ecommers.model.ItemBillEntity;
+import com.example.ecommers.model.ProductEntity;
 import com.example.ecommers.repository.I_ItemBillRepository;
 import com.example.ecommers.serviceInterface.I_ItemBillService;
+import com.example.ecommers.serviceInterface.I_ProductService;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,7 @@ public class ItemBillService implements I_ItemBillService {
 
 
     private final I_ItemBillRepository itemBillRepository;
+    private final I_ProductService productService;
 
     public List<ItemBillEntity> getAllItemsBill() {
         try {
@@ -71,4 +74,23 @@ public class ItemBillService implements I_ItemBillService {
 
 }
 
+    @Override
+    public ProductEntity productMostSaled() {
+        try {
+            ProductEntity product=null;
+            // Save the itemBidEntity using the repository
+            if (productService.getProductById(itemBillRepository.findProductIdMostlySaled()).isPresent()){
+                product=productService.getProductById(itemBillRepository.findProductIdMostlySaled()).get();
+            }
+            System.out.println(itemBillRepository.findProductIdMostlySaled().toString());
+            System.out.println(product.toString());
+            return product;
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Handle any persistence-related exceptions
+            throw new RuntimeException("Error getting productMostSaled: " + e.getMessage(), e);
+        }
+
     }
+
+}
