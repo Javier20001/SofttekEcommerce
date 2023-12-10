@@ -73,7 +73,7 @@ public class ProductController {
         } catch (RuntimeException e) {
             e.printStackTrace();
             // Handle other runtime exceptions, you might want to log them or return a generic error response
-            return new ResponseEntity<>("Error al guardar el producto", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("Error at save product", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -93,7 +93,7 @@ public class ProductController {
             e.printStackTrace(); // Adds this line to print the exception trace.
             throw e; // Throws the original exception to maintain previous behavior.
         }
-        return new ResponseEntity<>("Se actualizó correctamente", HttpStatus.OK);
+        return new ResponseEntity<>("Update successfully", HttpStatus.OK);
     }
 
     /**
