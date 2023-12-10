@@ -39,5 +39,6 @@ public interface I_BidService {
      */
     BidEntity saveBid(BidDTO bid);
 
+    Integer countBid();
 
 }

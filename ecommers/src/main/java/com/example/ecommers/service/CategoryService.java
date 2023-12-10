@@ -41,7 +41,11 @@ public class CategoryService implements I_CategoryService {
      */
     @Override
     public List<CategoryEntity> getAllCategory() {
-        return categoryRepository.findAll();
+        try {
+            return categoryRepository.filterByStatus();
+        }catch (Exception e){
+            throw new RuntimeException("Error searching all categories");
+        }
     }
 
     /**
@@ -54,10 +58,14 @@ public class CategoryService implements I_CategoryService {
      */
     @Override
     public Optional<CategoryEntity> getCategoryById(Long id) {
-        if (id != null) {
-            return categoryRepository.findById(id);
-        } else {
-            return Optional.empty();
+        try {
+            if (id != null) {
+                return categoryRepository.findById(id);
+            } else {
+                return Optional.empty();
+            }
+        }catch(Exception e){
+            throw new RuntimeException("Error searching for category, please retry");
         }
     }
 
@@ -71,14 +79,15 @@ public class CategoryService implements I_CategoryService {
      */
     @Override
     public CategoryEntity saveCategory(CategoryEntity category) {
-        if (categoryRepository.existsByCategory(category.getCategory())) {
-            // Si ya existe, lanzar una excepción
-            throw new EntityExistsException("Already exist a category with the name: " + category.getCategory());
+        try {
+            if (categoryRepository.existsByCategory(category.getCategory())) {
+                throw new EntityExistsException("Already exist a category with the name: " + category.getCategory());
+            }
+            category.setStatus(true);
+            return categoryRepository.save(category);
+        }catch (Exception e){
+            throw new RuntimeException("Could not save category");
         }
-
-        // Si no existe, guardar la categoría en la base de datos
-        category.setStatus(true);
-        return categoryRepository.save(category);
     }
 
 
@@ -95,12 +104,16 @@ public class CategoryService implements I_CategoryService {
      */
     @Override
     public CategoryEntity updateCategory(long id, CategoryEntity newCategory) {
-        return categoryRepository.findById(id).map(existingCategory -> {
-                    existingCategory.setCategory(newCategory.getCategory());
+        try {
+            return categoryRepository.findById(id).map(existingCategory -> {
+                        existingCategory.setCategory(newCategory.getCategory());
 
-                    return categoryRepository.save(existingCategory);
-                })
-                .orElseThrow(() -> new RuntimeException("Id category " + id + " not found"));
+                        return categoryRepository.save(existingCategory);
+                    })
+                    .orElseThrow(() -> new RuntimeException("Id category " + id + " not found"));
+        }catch (Exception e){
+            throw new RuntimeException("Could not update category");
+        }
     }
 
     /**
@@ -113,11 +126,15 @@ public class CategoryService implements I_CategoryService {
      */
     @Override
     public void deleteCategory(long id) {
-        categoryRepository.findById(id).map(existingCategory ->{
-                    existingCategory.setStatus(false);
-                    return categoryRepository.save(existingCategory);
-                })
-                .orElseThrow(() -> new RuntimeException("Id category " + id + " not found"));
+        try {
+            categoryRepository.findById(id).map(existingCategory -> {
+                        existingCategory.setStatus(false);
+                        return categoryRepository.save(existingCategory);
+                    })
+                    .orElseThrow(() -> new RuntimeException("Id category " + id + " not found"));
+        }catch (Exception e){
+            throw new RuntimeException("Could not delete category");
+        }
     }
 }
 

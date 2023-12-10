@@ -103,4 +103,21 @@ public class BidService implements I_BidService {
         }
     }
 
+    public Integer countBid() {
+        try {
+            // Use Optional to handle the possibility of null value
+            Optional<Integer> countOptional = Optional.ofNullable(bidRepository.countBid());
+
+
+            return countOptional.orElseThrow(() -> new RuntimeException("Count of Bid is null"));
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+
+            throw new RuntimeException("Failed to count users. Reason: " + e.getMessage());
+        }
+    }
+
 }

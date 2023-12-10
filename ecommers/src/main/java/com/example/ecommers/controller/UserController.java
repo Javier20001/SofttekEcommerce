@@ -54,6 +54,16 @@ public class UserController {
             return new ResponseEntity<>("User not found", HttpStatus.BAD_REQUEST);
         }
     }
+
+    @GetMapping("/count")
+    public ResponseEntity<?> countUsers(){
+        try{
+            return new ResponseEntity<>(userService.countUsers(), HttpStatus.OK);
+        }catch (RuntimeException e){
+            return new ResponseEntity<>("Users not found", HttpStatus.BAD_REQUEST);
+        }
+    }
+
 }
 
 

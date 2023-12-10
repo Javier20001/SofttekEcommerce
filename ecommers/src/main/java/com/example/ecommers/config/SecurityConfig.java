@@ -71,6 +71,7 @@ public class SecurityConfig {
                             .requestMatchers("/api/v1/product/list").permitAll()
                             .requestMatchers("/api/v1/product/find/{name}").permitAll()
                             .requestMatchers("/api/v1/admin/user/list/{username}").permitAll()
+                            .requestMatchers("/api/v1/admin/user/list").permitAll()
                             .requestMatchers("/api/v1/product/new").hasRole("ADMIN")
                             .requestMatchers("/api/v1/product/update").hasRole("ADMIN")
                             .requestMatchers("/api/v1/product/delete/{id}").hasRole("ADMIN")
@@ -81,6 +82,8 @@ public class SecurityConfig {
                             .requestMatchers("/api/v1/category/delete/{id}").hasRole("ADMIN")
                             .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
                             .requestMatchers("/api/v1/product/logout").permitAll()
+                            .requestMatchers("/api/v1/admin/user/count").hasRole("ADMIN")
+                            .requestMatchers("/api/v1/bid/count").hasRole("ADMIN")
                             .anyRequest().permitAll();
                 })
                 .sessionManagement(session -> {
