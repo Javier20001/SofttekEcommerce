@@ -1,7 +1,7 @@
 package com.example.ecommers.serviceInterface;
 
-import com.example.ecommers.dto.BidDTO;
-import com.example.ecommers.model.BidEntity;
+import com.example.ecommers.dto.BillDTO;
+import com.example.ecommers.model.BillEntity;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,34 +11,34 @@ import java.util.Optional;
  * Implementing classes should provide the business logic for CRUD operations on Bids.
  */
 
-public interface I_BidService {
+public interface I_BillService {
 
     /**
      * Retrieves a list of all products.
      *
      * @return List<BidEntity> A list of all bids.
-     * @see com.example.ecommers.model.BidEntity
+     * @see BillEntity
      */
-    List<BidEntity> getAllBid();
+    List<BillEntity> getAllBill();
 
     /**
      * Retrieves a bid by its identifier.
      *
      * @param id The identifier of the bids.
      * @return Optional<BidEntity> An Optional containing the bid, or empty if not found.
-     * @see com.example.ecommers.model.BidEntity
+     * @see BillEntity
      */
-    Optional<BidEntity> getBidById(Long id);
+    Optional<BillEntity> getBillById(Long id);
 
     /**
      * Saves a new Bid.
      *
      * @param bid The bid entity to be saved.
      * @return BidEntity The saved bid.
-     * @see com.example.ecommers.model.BidEntity
+     * @see BillEntity
      */
-    BidEntity saveBid(BidDTO bid);
+    BillEntity saveBill(BillDTO bid);
 
-    Integer countBid();
+    Integer countBill();
 
 }

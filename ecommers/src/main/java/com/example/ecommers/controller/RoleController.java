@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("api/vl/admin/role")
-@CrossOrigin(origins = "http://localhost:5173")
 @RequiredArgsConstructor
 public class RoleController {
     

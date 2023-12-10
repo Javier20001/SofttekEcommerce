@@ -1,16 +1,11 @@
 package com.example.ecommers.controller;
 
 
-import com.example.ecommers.model.BidEntity;
-import com.example.ecommers.repository.I_BidRepository;
-import com.example.ecommers.serviceInterface.I_BidService;
+import com.example.ecommers.model.BillEntity;
+import com.example.ecommers.serviceInterface.I_BillService;
 import com.google.gson.Gson;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,14 +23,13 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/bid")
-@CrossOrigin(origins = "http://localhost:5173" )
 @RequiredArgsConstructor
-public class BidController {
+public class BillController {
 
     /**
      * Service interface for handling bid-related business logic.
      */
-     private final I_BidService service;
+     private final I_BillService service;
 
     /**
      * Retrieves a list of all bids.
@@ -46,7 +40,7 @@ public class BidController {
     @GetMapping("/list")
     public ResponseEntity<?> list(){
         try {
-            List<BidEntity> list = service.getAllBid();
+            List<BillEntity> list = service.getAllBill();
             Gson gson = new Gson();
             String json = gson.toJson(list);
             return new ResponseEntity<>(json, HttpStatus.OK);
@@ -59,7 +53,7 @@ public class BidController {
     @GetMapping("/count")
     public ResponseEntity<?> countBid(){
         try{
-            return new ResponseEntity<>(service.countBid(), HttpStatus.OK);
+            return new ResponseEntity<>(service.countBill(), HttpStatus.OK);
         }catch (RuntimeException e){
             return new ResponseEntity<>("Users not found", HttpStatus.BAD_REQUEST);
         }

@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ItemBidEntity {
+public class ItemBillEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,8 +21,8 @@ public class ItemBidEntity {
     private Long idProduct;
 
     @ManyToOne
-    @JoinColumn(name = "id_bid", nullable = false)
-    private BidEntity bid;
+    @JoinColumn(name = "id_bill", nullable = false)
+    private BillEntity bid;
 
     @Column
     private Integer quantitySelected;

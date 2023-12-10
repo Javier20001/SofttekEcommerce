@@ -1,12 +1,10 @@
 package com.example.ecommers.service;
 
-import com.example.ecommers.model.ItemBidEntity;
-import com.example.ecommers.model.ProductEntity;
-import com.example.ecommers.repository.I_ItemBidRepository;
-import com.example.ecommers.serviceInterface.I_ItemBidService;
+import com.example.ecommers.model.ItemBillEntity;
+import com.example.ecommers.repository.I_ItemBillRepository;
+import com.example.ecommers.serviceInterface.I_ItemBillService;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,15 +14,15 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class ItemBidService implements I_ItemBidService {
+public class ItemBillService implements I_ItemBillService {
 
 
 
-    private final I_ItemBidRepository itemBidRepository;
+    private final I_ItemBillRepository itemBillRepository;
 
-    public List<ItemBidEntity> getAllItemsBid() {
+    public List<ItemBillEntity> getAllItemsBill() {
         try {
-            return itemBidRepository.findAll();
+            return itemBillRepository.findAll();
         } catch (Exception e) {
             // Handle the exception appropriately, you can log it or throw a custom exception
             // For demonstration purposes, let's print the stack trace
@@ -36,9 +34,9 @@ public class ItemBidService implements I_ItemBidService {
         }
     }
 
-    public Optional<ItemBidEntity> getItemBidById(Long id) {
+    public Optional<ItemBillEntity> getItemBillById(Long id) {
         try {
-            return itemBidRepository.findById(id);
+            return itemBillRepository.findById(id);
         } catch (Exception e) {
             // Handle the exception appropriately, you can log it or throw a custom exception
             // For demonstration purposes, let's print the stack trace
@@ -54,9 +52,9 @@ public class ItemBidService implements I_ItemBidService {
     }
 
 
-    public ItemBidEntity saveItem(@NotNull ItemBidEntity itemBidEntity) throws IllegalArgumentException {
+    public ItemBillEntity saveItem(@NotNull ItemBillEntity itemBillEntity) throws IllegalArgumentException {
         // Additional validation
-        if (itemBidEntity.getId() != null) {
+        if (itemBillEntity.getId() != null) {
             throw new IllegalArgumentException("ItemBidEntity id must be null for save operation.");
         }
 
@@ -64,7 +62,7 @@ public class ItemBidService implements I_ItemBidService {
 
         try {
             // Save the itemBidEntity using the repository
-            return itemBidRepository.save(itemBidEntity);
+            return itemBillRepository.save(itemBillEntity);
         } catch (Exception e) {
             // Handle any persistence-related exceptions
             throw new RuntimeException("Error saving ItemBidEntity: " + e.getMessage(), e);
