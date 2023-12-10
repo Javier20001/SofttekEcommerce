@@ -7,9 +7,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Entity class representing a bid.
  *
@@ -27,10 +24,10 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class BidEntity {
+public class BillEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idBid;
+    private Long idBill;
 
     @ManyToOne
     @JoinColumn(name = "usuario_id")

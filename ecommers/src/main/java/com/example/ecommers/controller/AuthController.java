@@ -34,7 +34,6 @@ import java.util.Map;
  * This class represents the REST controller for handling authentication and user registration.
  */
 @RestController
-@CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/api/v1/auth")
 
 @RequiredArgsConstructor
