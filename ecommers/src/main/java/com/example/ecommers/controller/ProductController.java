@@ -84,17 +84,16 @@ public class ProductController {
      * @param product The updated product entity.
      * @return ResponseEntity<?> A response entity with a success message and HTTP status.
      * @PostMapping("/update") Mapping for the endpoint to update an existing product.
-     */
-    @PostMapping("/update")
+     */@PostMapping("/update")
     public ResponseEntity<?> updateProduct(@RequestBody ProductEntity product ){
         try{
-            service.updateProduct(product.getIdProduct(), product);
+            return new ResponseEntity<>(service.updateProduct(product.getIdProduct(), product), HttpStatus.OK);
         }catch (RuntimeException e) {
             e.printStackTrace(); // Adds this line to print the exception trace.
             throw e; // Throws the original exception to maintain previous behavior.
         }
-        return new ResponseEntity<>("Update successfully", HttpStatus.OK);
     }
+
 
     /**
      * Deletes a product by its identifier.
