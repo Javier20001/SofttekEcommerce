@@ -1,6 +1,5 @@
 package com.example.ecommers.dto;
 
-import com.example.ecommers.model.ItemBidEntity;
 import com.example.ecommers.model.ItemEntity;
 import lombok.Data;
 
@@ -9,7 +8,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Data
-public class BidDTO {
+public class BillDTO {
     private Long id;
     private String province;
     private String locality;

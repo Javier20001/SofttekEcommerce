@@ -1,9 +1,9 @@
 package com.example.ecommers.controller;
 
-import com.example.ecommers.dto.BidDTO;
+import com.example.ecommers.dto.BillDTO;
 import com.example.ecommers.dto.PaymentMPDTO;
 import com.example.ecommers.model.*;
-import com.example.ecommers.serviceInterface.I_BidService;
+import com.example.ecommers.serviceInterface.I_BillService;
 import com.example.ecommers.serviceInterface.I_ProductService;
 import com.google.gson.Gson;
 import com.mercadopago.client.preference.PreferenceBackUrlsRequest;
@@ -23,16 +23,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/api/v1/product/mercadoPago")
 @RequiredArgsConstructor
 public class MpController {
 
-    private final I_BidService bidService;
+    private final I_BillService bidService;
     private final I_ProductService productService;
 
     @PostMapping("/compra")
-    @CrossOrigin(origins = "https://www.mercadopago.com/")
     public ResponseEntity<String> mercadoPago(@Valid @RequestBody PaymentMPDTO paymentMPDTO) throws MPException, MPApiException {
         try {
             MercadoPagoConfig.setAccessToken("TEST-5642789275818402-120519-ce2348b6a2e786844849c5e1f8aa2e42-498645273");
@@ -75,10 +73,10 @@ public class MpController {
         }
     }
 
-    @PostMapping("/newBid")
-    public ResponseEntity<?> createBid(@Valid @RequestBody BidDTO bidDTO) {
+    @PostMapping("/newBill")
+    public ResponseEntity<?> createBill(@Valid @RequestBody BillDTO billDTO) {
         try {
-            bidService.saveBid(bidDTO);
+            bidService.saveBill(billDTO);
             List<ProductEntity>products=productService.findByStatusTrue();
             Gson gson = new Gson();
             String json = gson.toJson(products);

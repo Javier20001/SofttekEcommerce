@@ -1,7 +1,7 @@
 package com.example.ecommers.repository;
 
 
-import com.example.ecommers.model.BidEntity;
+import com.example.ecommers.model.BillEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -15,8 +15,8 @@ import org.springframework.stereotype.Repository;
  */
 
 @Repository
-public interface I_BidRepository extends JpaRepository<BidEntity , Long> {
+public interface I_BillRepository extends JpaRepository<BillEntity, Long> {
 
-    @Query("SELECT COUNT(b) FROM BidEntity b")
-    Integer countBid();
+    @Query("SELECT COUNT(b) FROM BillEntity b")
+    Integer countBill();
 }
