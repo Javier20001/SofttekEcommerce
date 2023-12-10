@@ -84,6 +84,8 @@ public class SecurityConfig {
                             .requestMatchers("/api/v1/product/logout").permitAll()
                             .requestMatchers("/api/v1/admin/user/count").hasRole("ADMIN")
                             .requestMatchers("/api/v1/bid/count").hasRole("ADMIN")
+                            .requestMatchers("/api/v1/bid/list").authenticated()
+
                             .anyRequest().permitAll();
                 })
                 .sessionManagement(session -> {

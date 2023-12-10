@@ -1,9 +1,7 @@
 package com.example.ecommers.controller;
 
-
 import com.example.ecommers.model.BillEntity;
 import com.example.ecommers.serviceInterface.I_BillService;
-import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,16 +36,17 @@ public class BillController {
      * @GetMapping("/list") Mapping for the endpoint to retrieve the list of all bids.
      */
     @GetMapping("/list")
-    public ResponseEntity<?> list(){
+    public ResponseEntity<?> list() {
         try {
+            // Obtén tu lista de facturas
             List<BillEntity> list = service.getAllBill();
-            Gson gson = new Gson();
-            String json = gson.toJson(list);
-            return new ResponseEntity<>(json, HttpStatus.OK);
-        }catch (RuntimeException re){
+
+            return new ResponseEntity<>(list, HttpStatus.OK);
+        } catch (RuntimeException re) {
             return new ResponseEntity<>(re.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+
 
 
     @GetMapping("/count")
