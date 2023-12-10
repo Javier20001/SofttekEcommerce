@@ -28,7 +28,7 @@ public class UserInitializer implements ApplicationRunner{
     public void run(ApplicationArguments args) throws Exception {
         if(i_userRepository.count()==0){
             //i_userRepository.save(new UserEntity(1L,"testUser", "123@example.com.ar", pass.encode("password"),  "resetToken", LocalDateTime.now().plusDays(1), List.of(new RoleEntity(1L, RolesName.USER)) , true));
-            //i_userRepository.save(new UserEntity(2L,"testUser2", "1234@example.com.ar", "password", "resetToken", LocalDateTime.now().plusDays(1), List.of(new RoleEntity(2L, RolesName.ADMIN)) , true));
+            i_userRepository.save(new UserEntity(2L,"testUser2", "1234@example.com.ar", pass.encode("password"), "resetToken", LocalDateTime.now().plusDays(1), List.of(new RoleEntity(2L, RolesName.ADMIN)) , true));
         }
     }
 }
