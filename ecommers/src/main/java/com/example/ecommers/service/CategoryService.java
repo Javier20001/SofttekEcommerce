@@ -107,7 +107,6 @@ public class CategoryService implements I_CategoryService {
         try {
             return categoryRepository.findById(id).map(existingCategory -> {
                         existingCategory.setCategory(newCategory.getCategory());
-
                         return categoryRepository.save(existingCategory);
                     })
                     .orElseThrow(() -> new RuntimeException("Id category " + id + " not found"));

@@ -70,15 +70,15 @@ public class CategoryController {
     /**
      * Updates an existing category.
      *
-     * @param id         The identifier of the category to be updated.
      * @param newCategory The updated category entity.
      * @return ResponseEntity<CategoryEntity> A response entity containing the updated category with HTTP status.
      * @PutMapping("update/{id}") Mapping for the endpoint to update an existing category.
      */
-    @PutMapping("update/{id}")
-    public ResponseEntity<?> updateCategory(@PathVariable Long id, @RequestBody CategoryEntity newCategory) {
+    @PutMapping("/update")
+    public ResponseEntity<?> updateCategory(@RequestBody CategoryEntity newCategory) {
         try {
-            return new ResponseEntity<>(categoryService.updateCategory(id, newCategory), HttpStatus.OK);
+            System.out.println(newCategory.toString());
+            return new ResponseEntity<>(categoryService.updateCategory(newCategory.getIdCategory(), newCategory), HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>("Error while updating category", HttpStatus.BAD_REQUEST);
         }
