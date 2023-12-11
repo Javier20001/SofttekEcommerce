@@ -18,12 +18,13 @@ public class UserController {
     private final UserService userService;
 
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody UserEntity newUser) {
+    @PutMapping("/update")
+    public ResponseEntity<?> updateUser( @RequestBody UserEntity newUser) {
         try {
-            UserEntity updatedUser = userService.updateUser(id, newUser);
-            return new ResponseEntity<>(updatedUser, HttpStatus.OK);
+
+            return new ResponseEntity<>(userService.updateUser(newUser.getId(), newUser), HttpStatus.OK);
         }catch(Exception e){
+            e.printStackTrace();
             return new ResponseEntity<>("Email not found", HttpStatus.BAD_REQUEST);
         }
     }
@@ -60,6 +61,17 @@ public class UserController {
             return new ResponseEntity<>(userService.countUsers(), HttpStatus.OK);
         }catch (RuntimeException e){
             return new ResponseEntity<>("Users not found", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping("/changeRole")
+    public ResponseEntity<?> changeRole(@RequestBody UserEntity user){
+        try {
+            userService.changeRole(user);
+            return new ResponseEntity<>("Updated successfully",HttpStatus.OK);
+        }catch (RuntimeException e){
+            e.printStackTrace();
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
         }
     }
 
