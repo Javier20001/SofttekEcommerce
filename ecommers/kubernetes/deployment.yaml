@@ -1,0 +1,79 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hardtek
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hardtek
+  template:
+    metadata:
+      labels:
+        app: hardtek
+    spec:
+      containers:
+        - name: hardtek
+          image: hardtek:tag
+          ports:
+            - containerPort: 8080
+          env:
+            - name: JWT_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: hardtek-secrets
+                  key: jwt.secret.key
+            - name: JWT_EXPIRATION
+              valueFrom:
+                secretKeyRef:
+                  name: hardtek-secrets
+                  key: jwt.time.expiration
+            - name: DB_URL
+              valueFrom:
+                secretKeyRef:
+                  name: hardtek-secrets
+                  key: spring.datasource.url
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: hardtek-secrets
+                  key: spring.datasource.username
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: hardtek-secrets
+                  key: spring.datasource.password
+            - name: MAIL_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: hardtek-secrets
+                  key: spring.mail.host
+            - name: MAIL_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: hardtek-secrets
+                  key: spring.mail.port
+            - name: MAIL_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: hardtek-secrets
+                  key: spring.mail.username
+            - name: MAIL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: hardtek-secrets
+                  key: spring.mail.password
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hardtek-service
+spec:
+  selector:
+    app: hardtek
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+  type: LoadBalancer
+
