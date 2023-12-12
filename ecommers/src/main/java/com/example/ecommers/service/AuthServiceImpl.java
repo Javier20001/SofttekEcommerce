@@ -116,7 +116,7 @@ public class AuthServiceImpl implements I_AuthService {
             user.setResetToken(UUID.randomUUID().toString());
             user.setExpirationDate(LocalDateTime.now().plusHours(2));
             userRepository.save(user);
-            String resetLink = "http://localhost:5173/password/new/" + user.getResetToken();
+            String resetLink = "https://hardtek.vercel.app/password/new/" + user.getResetToken();
             emailService.sendEmail(email, "Password Recovery", "Hello, this is your reset request email. To reset your password, visit  <a href='"+resetLink+"'>"+resetLink+"</a>");
         });
     }

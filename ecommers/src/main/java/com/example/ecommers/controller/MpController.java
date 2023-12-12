@@ -51,9 +51,9 @@ public class MpController {
             PreferenceRequest preferenceRequest = PreferenceRequest.builder()
                     .items(items)
                     .backUrls(PreferenceBackUrlsRequest.builder()
-                            .success("localhost:5173/Success")
-                            .pending("localhost:5173")
-                            .failure("localhost:5173/Failure")
+                            .success("hardtek.vercel.app/Success")
+                            .pending("hardtek.vercel.app")
+                            .failure("hardtek.vercel.app/Failure")
                             .build())
                     .autoReturn("approved")
                     .build();
@@ -69,7 +69,7 @@ public class MpController {
                 System.out.println("HTTP Status Code: " + apiException.getStatusCode());
                 System.out.println("Response: " + apiException.getMessage());
             }
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al procesar la solicitud");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Request error");
         }
     }
 
