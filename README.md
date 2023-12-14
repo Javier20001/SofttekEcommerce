@@ -55,7 +55,7 @@ Asegúrate de tener instalados los siguientes elementos:
 - Martin Gimenez
 - Alan Papillú
 - Matias Perona
-- Benjy Marti
+- Luciano Benjamin Marti
 - Juan Cruz Insua
 - Gonzalo Ivan Vallone
 - Lucio Dicuonzo
